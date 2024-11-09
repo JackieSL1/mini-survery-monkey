@@ -14,7 +14,7 @@ public class Survey {
     private String title;
 
     @OneToOne
-    private User surveyor;
+    private User user;
 
     @OneToMany
     private List<Question> questions;
@@ -37,12 +37,12 @@ public class Survey {
         this.title = title;
     }
 
-    public User getSurveyor() {
-        return surveyor;
+    public User getUser() {
+        return user;
     }
 
-    public void setSurveyor(User owner) {
-        this.surveyor = owner;
+    public void setUser(User owner) {
+        this.user = owner;
     }
 
     public List<Question> getQuestions() {
