@@ -8,32 +8,38 @@ public abstract class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int questionId;
+    private int id;
 
-    private String questionTitle;
+    private String question;
 
-    private int questionNumber;
+    private int number;
 
     @ManyToOne
-    @JoinColumn(name="survey_id")
+    @JoinColumn
     private Survey survey;
 
-    public Question() {}
-
-    public String getQuestionTitle() {
-        return questionTitle;
+    public int getId() {
+        return id;
     }
 
-    public void setQuestionTitle(String questionTitle) {
-        this.questionTitle = questionTitle;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getQuestionNumber() {
-        return questionNumber;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
+    public void setQuestion(String questionTitle) {
+        this.question = questionTitle;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int questionNumber) {
+        this.number = questionNumber;
     }
 
     public Survey getSurvey() {

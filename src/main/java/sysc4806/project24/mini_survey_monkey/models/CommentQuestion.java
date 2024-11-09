@@ -8,5 +8,4 @@ import jakarta.persistence.Id;
 @Entity
 public class CommentQuestion extends Question {
 
-    public CommentQuestion() {}
 }

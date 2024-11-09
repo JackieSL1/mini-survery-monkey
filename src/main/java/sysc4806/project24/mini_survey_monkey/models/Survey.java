@@ -9,19 +9,25 @@ public class Survey {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int surveyId;
+    private int id;
 
     private String title;
 
     @OneToOne
-    private Surveyor owner;
+    private User surveyor;
 
     @OneToMany
     private List<Question> questions;
 
     private State state;
 
-    public Survey() {}
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -31,12 +37,12 @@ public class Survey {
         this.title = title;
     }
 
-    public Surveyor getOwner() {
-        return owner;
+    public User getSurveyor() {
+        return surveyor;
     }
 
-    public void setOwner(Surveyor owner) {
-        this.owner = owner;
+    public void setSurveyor(User owner) {
+        this.surveyor = owner;
     }
 
     public List<Question> getQuestions() {

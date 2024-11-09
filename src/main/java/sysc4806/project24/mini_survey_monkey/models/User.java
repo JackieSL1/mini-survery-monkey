@@ -6,16 +6,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Surveyor {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int surveyorId;
+    private int id;
 
     private String username;
 
     private String password;
 
-    public Surveyor() {}
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
