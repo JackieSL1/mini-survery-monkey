@@ -1,12 +1,35 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
-<head>
-    <title>Home</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    <p>Welcome home!</p>
-    <p><a href="../banana">Create new survey</a></p>
-</form>
-</body>
+    <head>
+        <title>Home</title>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+        <link rel="stylesheet" type="text/css" media="all"
+              href="/css/style.css" th:href="@{/css/style.css}">
+    </head>
+    <body>
+        <p>Welcome home!</p>
+
+        <!--Create new survey button-->
+        <form action="#" method="post" th:action="@{/create}">
+            <input type="submit" value="Create new survey"/>
+        </form>
+
+        <!--Dashboard to view all surveys-->
+        <h1>My Surveys</h1>
+        <table>
+            <tr>
+                <td>TITLE</td>
+                <td>STATUS</td>
+            </tr>
+            <tr th:each="survey: ${surveys}">
+                <td><a
+                        th:href="@{/create/{id}(id=${survey.getId()})}"
+                        th:text="|${survey.getTitle()}|"
+                ></a></td>
+                <td>
+                    <p th:text="${survey.getState()}"></p>
+                </td>
+            </tr>
+        </table>
+    </body>
 </html>

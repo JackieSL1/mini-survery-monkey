@@ -7,6 +7,8 @@ import java.util.List;
 @Entity
 public class Survey {
 
+    public static final String DEFAULT_TITLE = "Untitled";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -20,6 +22,17 @@ public class Survey {
     private List<Question> questions;
 
     private State state;
+
+    @Override
+    public String toString() {
+        return "Survey{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", user=" + user +
+                ", questions=" + questions +
+                ", state=" + state +
+                '}';
+    }
 
     public int getId() {
         return id;

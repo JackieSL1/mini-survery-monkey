@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title th:text="|Edit survey ${survey.getTitle()}|">Edit survey</title>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+        <link rel="stylesheet" type="text/css" media="all"
+              href="/css/style.css" th:href="@{/css/style.css}">
+    </head>
+    <body>
+        <p><a href="../home">Home</a></p>
+
+        <form method="post"
+              th:action="@{/create/{id}/update(id=${survey.getId()})}"
+              th:object="${survey}">
+            <!--Update survey title-->
+            <p>Title:<br><input th:field="*{title}" type="text"/></p>
+            <!--Save survey-->
+            <p><input type="submit" value="Save"/></p>
+        </form>
+    </body>
+</html>
