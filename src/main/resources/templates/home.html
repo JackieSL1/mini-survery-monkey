@@ -6,10 +6,17 @@
     </head>
     <body>
         <p>Welcome home!</p>
+
         <form action="#" method="post" th:action="@{/create}">
             <input type="submit" value="Create new survey"/>
         </form>
+
+        <h1>My Surveys</h1>
+
         <table>
+            <tr>
+                <td>TITLE</td>
+            </tr>
             <tr th:each="survey: ${surveys}">
                 <td><a
                         th:href="@{/create/{id}(id=${survey.getId()})}"
