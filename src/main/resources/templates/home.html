@@ -16,12 +16,16 @@
         <table>
             <tr>
                 <td>TITLE</td>
+                <td>STATUS</td>
             </tr>
             <tr th:each="survey: ${surveys}">
                 <td><a
                         th:href="@{/create/{id}(id=${survey.getId()})}"
-                        th:text="|${survey.getTitle()} (${#strings.toLowerCase(survey.getState())})|"
+                        th:text="|${survey.getTitle()}|"
                 ></a></td>
+                <td>
+                    <p th:text="${survey.getState()}"></p>
+                </td>
             </tr>
         </table>
     </body>
