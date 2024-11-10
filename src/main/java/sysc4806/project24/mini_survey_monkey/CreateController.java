@@ -24,7 +24,6 @@ public class CreateController {
         newSurvey.setState(State.DRAFT);
 
         Survey savedSurvey = surveyRepository.save(newSurvey);
-        System.out.println(savedSurvey);
 
         return "redirect:/create/" + savedSurvey.getId();
     }
@@ -32,7 +31,6 @@ public class CreateController {
     @GetMapping("/create/{surveyID}")
     public String edit(@PathVariable("surveyID") int surveyID, Model model) {
         Survey survey = surveyRepository.findById(surveyID);
-        System.out.println(survey);
         model.addAttribute("survey", survey);
 
         return "create";
