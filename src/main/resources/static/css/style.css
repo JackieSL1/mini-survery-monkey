@@ -1,0 +1,21 @@
+body{
+    max-width:40em;
+    margin:0 auto;
+    padding:15px;
+    line-height:30px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f4f6f6;
+}
