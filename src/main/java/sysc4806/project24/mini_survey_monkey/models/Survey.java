@@ -7,21 +7,40 @@ import java.util.List;
 @Entity
 public class Survey {
 
+    public static final String DEFAULT_TITLE = "Untitled";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int surveyId;
+    private int id;
 
     private String title;
 
     @OneToOne
-    private Surveyor owner;
+    private User user;
 
     @OneToMany
     private List<Question> questions;
 
     private State state;
 
-    public Survey() {}
+    @Override
+    public String toString() {
+        return "Survey{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", user=" + user +
+                ", questions=" + questions +
+                ", state=" + state +
+                '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -31,12 +50,12 @@ public class Survey {
         this.title = title;
     }
 
-    public Surveyor getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner(Surveyor owner) {
-        this.owner = owner;
+    public void setUser(User owner) {
+        this.user = owner;
     }
 
     public List<Question> getQuestions() {

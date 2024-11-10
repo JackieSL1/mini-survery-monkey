@@ -7,8 +7,6 @@ public class CommentResponse extends Response {
 
     private String text;
 
-    public CommentResponse(){}
-
     public String getText() {
         return text;
     }

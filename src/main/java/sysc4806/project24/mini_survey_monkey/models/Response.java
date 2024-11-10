@@ -8,7 +8,13 @@ public abstract class Response {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int responseId;
+    private int id;
 
-    public Response() {}
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
