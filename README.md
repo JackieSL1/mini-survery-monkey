@@ -22,7 +22,7 @@ The world's second most popular survey platform.
 <details>
 <summary>Expand contents</summary>
 
-- [Issues](#issues)
+- [Current State](#current-state)
 - [Scope](#scope)
 - [Use cases](#use-cases)
 - [DB schema](#db-schema)
