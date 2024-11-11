@@ -48,7 +48,7 @@ public class CreateController {
 
         return "redirect:/create/" + surveyID;
     }
-    @PostMapping("/create/{surveyID}/addQuestion")
+    @PostMapping("/create/{surveyID}/question")
     public String addQuestion(@PathVariable("surveyID") int surveyID) {
         Survey survey = surveyRepository.findById(surveyID);
         CommentQuestion newQuestion = new CommentQuestion();

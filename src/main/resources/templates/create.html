@@ -39,7 +39,7 @@
 
         <!-- Add new question to survey -->
         <form method="post"
-              th:action="@{/create/{id}/addQuestion(id=${survey.getId()})}">
+              th:action="@{/create/{id}/question(id=${survey.getId()})}">
             <p><button type="submit" value="Add Question">Add question</button></p>
         </form>
 </body>
