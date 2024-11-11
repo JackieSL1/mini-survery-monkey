@@ -79,5 +79,5 @@ public class ControllerIntegrationTest {
                             .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey Title"))));
                 });
     }
-
 }
+
