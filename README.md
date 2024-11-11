@@ -3,7 +3,11 @@
 </p>
 <h1 align="center">
 Mini Survey Monkey
+
+![App Deployed](https://github.com/JackieSL1/mini-survey-monkey/actions/workflows/main_mini-survey-monkey.yml/badge.svg)
+  
 </h1>
+
 <p align="center">
 The world's second most popular survey platform.
 <p>
@@ -18,6 +22,7 @@ The world's second most popular survey platform.
 <details>
 <summary>Expand contents</summary>
 
+- [Issues](#issues)
 - [Scope](#scope)
 - [Use cases](#use-cases)
 - [DB schema](#db-schema)
@@ -25,14 +30,22 @@ The world's second most popular survey platform.
 
 </details>
 
+## Current State
+The project includes a home page with all surveys, where new surveys can be created, and existing ones edited. Currently, surveys can have titles, and comments type questions. The app is deployed on Azure, and that are run on deploy via GitHub actions.
+
+In Milestone 2, more question types, the ability to share and respond to surveys, and user authentication for the surveyor will all be added.
+
 ## Scope
 *As stated in the project description.*
 * Surveyor can create a survey with a list of Questions.
 * Questions can be open-ended (text), asking for a number within a range, or asking to choose among many options.  
 * Users fill out a survey that is a form generated based on the type of questions in the survey.
 * Surveyor can close the survey whenever they want (thus not letting in new users to fill out the survey), and at that point a survey result is generated, compiling the answers: for open-ended questions, the answers are just listed as-is, for number questions a histogram of the answers is generated, for choice questions a pie chart is generated
-
+  
 ## Use cases
+<details>
+<summary>Expand contents</summary>
+
 
 ### Create account
 New user should be able to create an account.
@@ -85,6 +98,7 @@ User should be able to add a multiple-choice question to their survey.
 
 ### Collect responses
 User should be able to share their survey and collect responses.
+</details>
 
 ## DB schema
 The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
@@ -97,3 +111,4 @@ Short descriptions of what each page does.
 **Pages (in alphabetical order):**
 * `banana`: Health check endpoint.
 * `home`: Dashboard for surveyor to view all their surveys. Includes buttons to create new surveys and manage their surveys.
+* `create/{id}`: Where surveys can be created and modified.
