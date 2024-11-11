@@ -24,7 +24,7 @@
 
                 <!-- Save question -->
                 <form method="post"
-                      th:action="@{/create/{surveyID}/editQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}">
+                      th:action="@{/create/{surveyID}/question/{questionID}/update(surveyID=${survey.getId()}, questionID=${question.id})}">
                     <input type="text" name="newQuestionText" placeholder="Edit question" th:value="${question.question}" />
                     <input type="submit" value="Save" />
                 </form>

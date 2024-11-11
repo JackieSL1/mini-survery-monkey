@@ -59,7 +59,7 @@ public class CreateController {
         return "redirect:/create/" + surveyID;
     }
 
-    @PostMapping("/create/{surveyID}/editQuestion/{questionID}")
+    @PostMapping("/create/{surveyID}/question/{questionID}/update")
     public String editQuestion(
             @PathVariable("surveyID") int surveyID,
             @PathVariable("questionID") int questionID,
