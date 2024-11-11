@@ -21,27 +21,29 @@
         <h3>Questions</h3>
         <ul>
             <li th:each="question : ${survey.questions}">
-                <!-- Display question text -->
-
 
                 <!-- Edit form for each question -->
-                <form method="post" th:action="@{/create/{surveyID}/editQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}" style="display:inline;">
+                <form method="post"
+                      th:action="@{/create/{surveyID}/editQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}"
+                      style="display:inline;">
                     <input type="text" name="newQuestionText" placeholder="Edit question" th:value="${question.question}" />
                     <input type="submit" value="Update Question" />
                 </form>
 
                 <!-- Delete button for each question -->
-                <form method="post" th:action="@{/create/{surveyID}/deleteQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}" style="display:inline;">
+                <form method="post"
+                      th:action="@{/create/{surveyID}/deleteQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}"
+                      style="display:inline;">
                     <input type="submit" value="Delete Question" onclick="return confirm('Are you sure you want to delete this question?');"/>
                 </form>
             </li>
         </ul>
 
         <!-- Form to add a new question (moved below the question list) -->
-        <form method="post" th:action="@{/create/{id}/addQuestion(id=${survey.getId()})}">
-
+        <form method="post"
+              th:action="@{/create/{id}/addQuestion(id=${survey.getId()})}">
             <p><button type="submit" value="Add Question">Add question</button></p>
-    </form>
+        </form>
 </body>
 </html>
 
