@@ -31,7 +31,7 @@
 
                 <!-- Delete question -->
                 <form method="post"
-                      th:action="@{/create/{surveyID}/deleteQuestion/{questionID}(surveyID=${survey.getId()}, questionID=${question.id})}">
+                      th:action="@{/create/{surveyID}/question/{questionID}/delete(surveyID=${survey.getId()}, questionID=${question.id})}">
                     <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this question?');"/>
                 </form>
             </li>
