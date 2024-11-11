@@ -1,20 +1,24 @@
 package sysc4806.project24.mini_survey_monkey;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sysc4806.project24.mini_survey_monkey.models.CommentQuestion;
+import sysc4806.project24.mini_survey_monkey.models.Question;
 import sysc4806.project24.mini_survey_monkey.models.State;
 import sysc4806.project24.mini_survey_monkey.models.Survey;
+import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 @Controller
 public class CreateController {
 
     private final SurveyRepository surveyRepository;
+    private final QuestionRepository questionRepository;
 
-    public CreateController(SurveyRepository surveyRepository) {
+    public CreateController(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
         this.surveyRepository = surveyRepository;
+        this.questionRepository = questionRepository;
     }
 
     @PostMapping("/create")
@@ -40,8 +44,42 @@ public class CreateController {
     public String save(@PathVariable("surveyID") int surveyID, @ModelAttribute Survey newSurvey) {
         Survey survey = surveyRepository.findById(surveyID);
         survey.setTitle(newSurvey.getTitle());
+
         surveyRepository.save(survey);
 
+        return "redirect:/create/" + surveyID;
+    }
+
+    @PostMapping("/create/{surveyID}/question")
+    public String addQuestion(@PathVariable("surveyID") int surveyID) {
+        Survey survey = surveyRepository.findById(surveyID);
+        CommentQuestion newQuestion = new CommentQuestion();
+        survey.addQuestion(newQuestion);
+
+        surveyRepository.save(survey);
+
+        return "redirect:/create/" + surveyID;
+    }
+
+    @PostMapping("/create/{surveyID}/question/{questionID}/update")
+    public String editQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("newQuestionText") String newQuestionText) {
+        Question question = questionRepository.findById(questionID);
+        question.setQuestion(newQuestionText);
+
+        questionRepository.save(question);
+
+        return "redirect:/create/" + surveyID;
+    }
+
+    @PostMapping("/create/{surveyID}/question/{questionID}/delete")
+    public String deleteQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID) {
+
+        questionRepository.deleteById(questionID);
         return "redirect:/create/" + surveyID;
     }
 }
