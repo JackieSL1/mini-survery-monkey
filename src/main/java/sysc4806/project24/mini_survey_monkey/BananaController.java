@@ -12,6 +12,6 @@ public class BananaController {
 
     @GetMapping("/banana")
     public String banana(Model model) {
-        return "survey_form";
+        return "banana";
     }
 }
