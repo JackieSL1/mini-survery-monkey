@@ -66,12 +66,10 @@ public class CreateController {
             @PathVariable("surveyID") int surveyID,
             @PathVariable("questionID") int questionID,
             @RequestParam("newQuestionText") String newQuestionText) {
+        Question question = questionRepository.findById(questionID);
+        question.setQuestion(newQuestionText);
 
-        Question question = questionRepository.findById(questionID).orElse(null);
-        if (question != null) {
-            question.setQuestion(newQuestionText);
-            questionRepository.save(question);
-        }
+        questionRepository.save(question);
 
         return "redirect:/create/" + surveyID;
     }
