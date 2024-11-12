@@ -3,9 +3,7 @@ package sysc4806.project24.mini_survey_monkey.services;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sysc4806.project24.mini_survey_monkey.models.User;
 import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Service
