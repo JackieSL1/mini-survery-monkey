@@ -5,23 +5,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sysc4806.project24.mini_survey_monkey.models.User;
 import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private final PasswordEncoder encoder;
-
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-        this.encoder = encoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("username not found"));
+        // Check if the user exists in the database
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found. You are required to register an account first.")
+        );
+
+        return user; // If the user exists, return the user details
     }
 }
+
