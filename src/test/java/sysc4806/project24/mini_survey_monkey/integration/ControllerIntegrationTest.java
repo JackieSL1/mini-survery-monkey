@@ -80,5 +80,15 @@ public class ControllerIntegrationTest {
                             .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey Title"))));
                 });
     }
+
+    /**
+     * Tests if root url redirects to correct page.
+     */
+    @Test
+    public void testValidRootRedirection() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", startsWith("/home")));
+    }
 }
 

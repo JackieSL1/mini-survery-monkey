@@ -14,6 +14,11 @@ public class HomeController {
         this.surveyRepository = surveyRepository;
     }
 
+    @GetMapping("/")
+    public String root(Model model) {
+        return "redirect:/home"; // TODO: redirect to login page once implemented
+    }
+
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("surveys", surveyRepository.findAll());
