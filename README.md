@@ -26,6 +26,7 @@ The world's second most popular survey platform.
 - [Scope](#scope)
 - [Use cases](#use-cases)
 - [DB schema](#db-schema)
+- [UML class Diagram](#uml-class-diagram-for-models)
 - [Page descriptions](#page-descriptions)
 
 </details>
@@ -104,6 +105,9 @@ User should be able to share their survey and collect responses.
 The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
 
 ![DB schema](diagrams/db-schema.svg)
+
+## UML class Diagram for Models
+![UML class Diagram for Models](diagrams/ModelUML.drawio.png)
 
 ## Page descriptions
 Short descriptions of what each page does.
