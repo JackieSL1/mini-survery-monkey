@@ -3,19 +3,29 @@ package sysc4806.project24.mini_survey_monkey;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sysc4806.project24.mini_survey_monkey.interceptors.DraftSurveyInterceptor;
+import sysc4806.project24.mini_survey_monkey.interceptors.SurveyStateInterceptor;
+import sysc4806.project24.mini_survey_monkey.models.State;
+
+import java.util.List;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final DraftSurveyInterceptor surveyStateInterceptor;
+    private final SurveyStateInterceptor draftSurveyInterceptor;
+    private final SurveyStateInterceptor nonDraftSurveyInterceptor;
 
-    public WebMvcConfig(DraftSurveyInterceptor surveyStateInterceptor) {
-        this.surveyStateInterceptor = surveyStateInterceptor;
+    public WebMvcConfig(SurveyStateInterceptor draftSurveyInterceptor, SurveyStateInterceptor nonDraftSurveyInterceptor) {
+        this.draftSurveyInterceptor = draftSurveyInterceptor;
+        draftSurveyInterceptor.setStateToFilter(List.of(State.DRAFT));
+
+        nonDraftSurveyInterceptor.setStateToFilter(List.of(State.OPEN, State.CLOSED));
+        this.nonDraftSurveyInterceptor = nonDraftSurveyInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(surveyStateInterceptor).addPathPatterns("/**/create/**");
+        registry.addInterceptor(draftSurveyInterceptor).addPathPatterns("/**/create/**");
+
+//        registry.addInterceptor(nonDraftSurveyInterceptor).addPathPatterns("/**/survey/**"); TODO: Uncomment when survey endpoints are added
     }
 }
