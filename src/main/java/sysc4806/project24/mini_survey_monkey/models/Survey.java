@@ -15,7 +15,7 @@ public class Survey {
 
     private String title;
 
-    @OneToOne
+    @ManyToOne
     private User user;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
