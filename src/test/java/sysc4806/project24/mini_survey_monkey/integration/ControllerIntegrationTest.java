@@ -90,5 +90,31 @@ public class ControllerIntegrationTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", startsWith("/home")));
     }
+
+    /**
+     * Tests when a survey goes from draft to open
+     */
+    @Test
+    public void testOpeningSurvey() throws Exception {
+        mockMvc.perform(post("/create"))
+                .andDo(result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    // Now, open the survey
+                    mockMvc.perform(post("/create/" + surveyId + "/open"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/survey/" + surveyId));
+
+                    // Verify that /create/ is now invalid
+                    mockMvc.perform(post("/create/" + surveyId + "/open"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/survey/" + surveyId));
+                    mockMvc.perform(get("/create/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("create"))
+                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey Title"))));
+                });
+    }
 }
 

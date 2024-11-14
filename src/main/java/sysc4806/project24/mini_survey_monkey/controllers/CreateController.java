@@ -50,6 +50,16 @@ public class CreateController {
         return "redirect:/create/" + surveyID;
     }
 
+    @PostMapping("/create/{surveyID}/open")
+    public String open(@PathVariable("surveyID") int surveyID, @ModelAttribute Survey newSurvey) {
+        Survey survey = surveyRepository.findById(surveyID);
+        survey.setTitle(newSurvey.getTitle());
+
+        surveyRepository.save(survey);
+
+        return "redirect:/create/" + surveyID;
+    }
+
     @PostMapping("/create/{surveyID}/question")
     public String addQuestion(@PathVariable("surveyID") int surveyID) {
         Survey survey = surveyRepository.findById(surveyID);
