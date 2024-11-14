@@ -54,4 +54,12 @@ public abstract class Question {
     public void setSurvey(Survey survey) {
         this.survey = survey;
     }
+
+    public List<Response> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+    }
 }

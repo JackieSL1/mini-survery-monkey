@@ -11,7 +11,7 @@ public abstract class Response {
     private int id;
 
     @ManyToOne
-    Question question;
+    private Question question;
 
     public int getId() {
         return id;
@@ -19,5 +19,13 @@ public abstract class Response {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 }
