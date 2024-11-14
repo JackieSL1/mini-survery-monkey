@@ -24,8 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(draftSurveyInterceptor).addPathPatterns("/**/create/**");
-
-//        registry.addInterceptor(nonDraftSurveyInterceptor).addPathPatterns("/**/survey/**"); TODO: Uncomment when survey endpoints are added
+        registry.addInterceptor(nonDraftSurveyInterceptor).addPathPatterns("/**/create/**");
+//        registry.addInterceptor(draftSurveyInterceptor).addPathPatterns("/**/survey/**"); TODO: Uncomment when survey endpoints are added
     }
 }
