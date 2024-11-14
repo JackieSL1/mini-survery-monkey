@@ -101,19 +101,20 @@ public class ControllerIntegrationTest {
                     String location = result.getResponse().getHeader("Location");
                     int surveyId = Integer.parseInt(location.split("/")[2]);
 
-                    // Now, open the survey
+                    // Now, open the survey, and confirm a redirect to /survey
                     mockMvc.perform(post("/create/" + surveyId + "/open"))
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/survey/" + surveyId));
 
-                    // Verify that /create/ is now invalid
-                    mockMvc.perform(post("/create/" + surveyId + "/open"))
-                            .andExpect(status().is3xxRedirection())
-                            .andExpect(header().string("Location", "/survey/" + surveyId));
-                    mockMvc.perform(get("/create/" + surveyId))
+                    // Verify that /create/id is now invalid
+                    mockMvc.perform(post("/create/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+
+                    // /survey/id should now be valid
+                    mockMvc.perform(get("/survey/" + surveyId))
                             .andExpect(status().isOk())
-                            .andExpect(view().name("create"))
-                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey Title"))));
+                            .andExpect(view().name("survey"))
+                            .andExpect(model().attribute("survey", notNullValue()));
                 });
     }
 }

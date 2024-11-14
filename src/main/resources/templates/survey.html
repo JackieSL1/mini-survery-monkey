@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title th:text="|Survey ${survey.getTitle()}|">Survey</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+<p><a href="../home">Home</a></p>
+
+<!-- Survey questions -->
+<h3>Questions</h3>
+<ul>
+    <li th:each="question : ${survey.questions}">
+        <p th:text="question"></p>
+    </li>
+</ul>
+
+</body>
+</html>
+
+
