@@ -2,6 +2,8 @@ package sysc4806.project24.mini_survey_monkey.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Question {
@@ -9,6 +11,9 @@ public abstract class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @OneToMany
+    private List<Response> responses;
 
     private String question;
 

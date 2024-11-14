@@ -10,6 +10,9 @@ public abstract class Response {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @ManyToOne
+    Question question;
+
     public int getId() {
         return id;
     }
