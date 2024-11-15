@@ -96,34 +96,37 @@ public class ControllerIntegrationTest {
      */
     @Test
     public void testOpeningSurvey() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create"));
+        int surveyId = 1;
+
+        // /survey/id should initially be invalid
+        mockMvc.perform(get("/survey/" + surveyId))
+                .andExpect(status().is4xxClientError());
+
+        // Now, open the survey, and confirm a redirect to /survey
+        mockMvc.perform(post("/create/" + surveyId + "/open"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/survey/" + surveyId));
+
+        // Now, update the title of the created survey
+        mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New Survey Title")) ;
+
+        // Verify that /create/id is now invalid
+        mockMvc.perform(post("/create/" + surveyId))
+                .andExpect(status().is4xxClientError());
+
+        // /create should still work
         mockMvc.perform(post("/create"))
-                .andDo(result -> {
-                    String location = result.getResponse().getHeader("Location");
-                    int surveyId = Integer.parseInt(location.split("/")[2]);
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", startsWith("/create/")));
 
-                    // Now, open the survey, and confirm a redirect to /survey
-                    mockMvc.perform(post("/create/" + surveyId + "/open"))
-                            .andExpect(status().is3xxRedirection())
-                            .andExpect(header().string("Location", "/survey/" + surveyId));
-
-                    // Now, update the title of the created survey
-                    mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New Survey Title")) ;
-
-                    // Verify that /create/id is now invalid
-                    mockMvc.perform(post("/create/" + surveyId))
-                            .andExpect(status().is4xxClientError());
-
-                    // /create should still work
-                    mockMvc.perform(post("/create"))
-                            .andExpect(status().is3xxRedirection())
-                            .andExpect(header().string("Location", startsWith("/create/")));
-
-                    // /survey/id should now be valid
-                    mockMvc.perform(get("/survey/" + surveyId))
-                            .andExpect(status().isOk())
-                            .andExpect(view().name("survey"))
-                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))));
-                });
+        // /survey/id should now be valid
+        mockMvc.perform(get("/survey/" + surveyId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("survey"))
+                .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))));
+//                });
     }
 }
 
