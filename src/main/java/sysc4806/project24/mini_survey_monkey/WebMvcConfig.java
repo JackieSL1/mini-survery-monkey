@@ -16,9 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public WebMvcConfig(SurveyStateInterceptor draftSurveyInterceptor, SurveyStateInterceptor nonDraftSurveyInterceptor) {
         this.draftSurveyInterceptor = draftSurveyInterceptor;
-        draftSurveyInterceptor.setStateToFilter(List.of(State.DRAFT));
+        draftSurveyInterceptor.setStatesToFilterOut(List.of(State.DRAFT));
 
-        nonDraftSurveyInterceptor.setStateToFilter(List.of(State.OPEN, State.CLOSED));
+        nonDraftSurveyInterceptor.setStatesToFilterOut(List.of(State.OPEN, State.CLOSED));
         this.nonDraftSurveyInterceptor = nonDraftSurveyInterceptor;
     }
 

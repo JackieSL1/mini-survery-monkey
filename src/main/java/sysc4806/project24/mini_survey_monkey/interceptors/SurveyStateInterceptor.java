@@ -15,7 +15,7 @@ import java.util.List;
 public class SurveyStateInterceptor implements HandlerInterceptor {
 
     private final SurveyRepository surveyRepository;
-    private List<State> stateToFilter = new ArrayList<>();
+    private List<State> statesToFilterOut = new ArrayList<>();
 
     public SurveyStateInterceptor(SurveyRepository surveyRepository) {
         this.surveyRepository = surveyRepository;
@@ -24,27 +24,32 @@ public class SurveyStateInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Object surveyIDAttribute = request.getAttribute("surveyID");
+        // Not all endpoints have a surveyID, so it's valid for the surveyID attribute to not be present
         if (surveyIDAttribute == null) {
             return true;
         }
 
         int surveyID = Integer.parseInt(surveyIDAttribute.toString());
         Survey survey = surveyRepository.findById(surveyID);
+        // An invalid surveyID should be handled by the calling class, so this is valid
+        if (survey == null) {
+            return true;
+        }
 
-        // Filter out non-draft surveys
-        if (survey != null && stateToFilter.contains(survey.getState())) {
-
+        // Filter out surveys of specified states
+        if (statesToFilterOut.contains(survey.getState())) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cannot be visited while survey is in state: " + survey.getState().toString());
             return false;
         }
+
         return true;
     }
 
-    public List<State> getStateToFilter() {
-        return stateToFilter;
+    public List<State> getStatesToFilterOut() {
+        return statesToFilterOut;
     }
 
-    public void setStateToFilter(List<State> stateToFilter) {
-        this.stateToFilter = stateToFilter;
+    public void setStatesToFilterOut(List<State> stateToFilter) {
+        this.statesToFilterOut = stateToFilter;
     }
 }
