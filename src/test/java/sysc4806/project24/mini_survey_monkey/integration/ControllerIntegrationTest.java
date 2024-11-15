@@ -106,15 +106,23 @@ public class ControllerIntegrationTest {
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/survey/" + surveyId));
 
+                    // Now, update the title of the created survey
+                    mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New Survey Title")) ;
+
                     // Verify that /create/id is now invalid
                     mockMvc.perform(post("/create/" + surveyId))
                             .andExpect(status().is4xxClientError());
+
+                    // /create should still work
+                    mockMvc.perform(post("/create"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", startsWith("/create/")));
 
                     // /survey/id should now be valid
                     mockMvc.perform(get("/survey/" + surveyId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("survey"))
-                            .andExpect(model().attribute("survey", notNullValue()));
+                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))));
                 });
     }
 }
