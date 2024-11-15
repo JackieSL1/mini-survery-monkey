@@ -43,14 +43,6 @@ public class CreateController {
         return "create";
     }
 
-    @GetMapping("/survey/{surveyID}")
-    public String viewSurvey(@PathVariable("surveyID") int surveyID, Model model) {
-        Survey survey = surveyRepository.findById(surveyID);
-        model.addAttribute("survey", survey);
-
-        return "survey";
-    }
-
     @PostMapping("/create/{surveyID}/update")
     public String save(@PathVariable("surveyID") int surveyID, @ModelAttribute Survey newSurvey) {
         Survey survey = surveyRepository.findById(surveyID);
@@ -102,5 +94,13 @@ public class CreateController {
 
         questionRepository.deleteById(questionID);
         return "redirect:/create/" + surveyID;
+    }
+
+    @GetMapping("/survey/{surveyID}")
+    public String viewSurvey(@PathVariable("surveyID") int surveyID, Model model) {
+        Survey survey = surveyRepository.findById(surveyID);
+        model.addAttribute("survey", survey);
+
+        return "survey";
     }
 }
