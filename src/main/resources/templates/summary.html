@@ -15,6 +15,13 @@
         <ol>
             <li th:each="question : ${survey.questions}">
                 <p th:text="${question.getQuestion()}"></p>
+
+                <!-- Display options if the question is multiple-choice -->
+                <div th:if="${#strings.equals(question.class.simpleName, 'MultipleChoiceQuestion')}">
+                    <ul class="options-list">
+                        <li th:each="option : ${question.options}" th:text="${option}"></li>
+                    </ul>
+                </div>
             </li>
         </ol>
     </body>
