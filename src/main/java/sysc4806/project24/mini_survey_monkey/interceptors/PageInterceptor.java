@@ -7,15 +7,15 @@ import sysc4806.project24.mini_survey_monkey.models.State;
 import sysc4806.project24.mini_survey_monkey.models.Survey;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class PageInterceptor implements HandlerInterceptor {
 
-    private final SurveyRepository surveyRepository;
-    private String regex;
-    private List<State> surveyStatesToFilter;
+    protected final SurveyRepository surveyRepository;
+    protected String regex;
+    protected Set<State> surveyStatesToFilter;
 
     protected PageInterceptor(SurveyRepository surveyRepository) {
         this.surveyRepository = surveyRepository;
