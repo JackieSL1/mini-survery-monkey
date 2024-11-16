@@ -9,6 +9,13 @@
     <body>
         <p><a href="../home">Home</a></p>
 
+        <!-- Open survey title -->
+        <form method="post"
+              th:action="@{/create/{id}/open(id=${survey.getId()})}"
+              th:object="${survey}">
+            <p><input type="submit" value="Open"/></p>
+        </form>
+
         <!-- Update survey title -->
         <form method="post"
               th:action="@{/create/{id}/update(id=${survey.getId()})}"
