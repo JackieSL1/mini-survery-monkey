@@ -29,7 +29,7 @@
                                 th:text="|${survey.getTitle()}|"
                         ></a>
                         <a th:case="*"
-                           th:href="@{/survey/{id}(id=${survey.getId()})}"
+                           th:href="@{summary/{id}(id=${survey.getId()})}"
                            th:text="|${survey.getTitle()}|"
                         ></a>
                     </div>

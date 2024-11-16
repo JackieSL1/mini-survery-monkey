@@ -1,11 +1,8 @@
 package sysc4806.project24.mini_survey_monkey.controllers;
 
-import org.springframework.boot.Banner;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import sysc4806.project24.mini_survey_monkey.models.CommentQuestion;
 import sysc4806.project24.mini_survey_monkey.models.Question;
 import sysc4806.project24.mini_survey_monkey.models.State;
@@ -60,7 +57,7 @@ public class CreateController {
 
         surveyRepository.save(survey);
 
-        return "redirect:/survey/" + surveyID;
+        return "redirect:/summary/" + surveyID;
     }
 
     @PostMapping("/create/{surveyID}/question")
@@ -94,13 +91,5 @@ public class CreateController {
 
         questionRepository.deleteById(questionID);
         return "redirect:/create/" + surveyID;
-    }
-
-    @GetMapping("/survey/{surveyID}")
-    public String viewSurvey(@PathVariable("surveyID") int surveyID, Model model) {
-        Survey survey = surveyRepository.findById(surveyID);
-        model.addAttribute("survey", survey);
-
-        return "survey";
     }
 }
