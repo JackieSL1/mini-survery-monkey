@@ -3,12 +3,12 @@ package sysc4806.project24.mini_survey_monkey.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sysc4806.project24.mini_survey_monkey.models.CommentQuestion;
-import sysc4806.project24.mini_survey_monkey.models.Question;
-import sysc4806.project24.mini_survey_monkey.models.State;
-import sysc4806.project24.mini_survey_monkey.models.Survey;
+import sysc4806.project24.mini_survey_monkey.models.*;
 import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class CreateController {
@@ -92,4 +92,24 @@ public class CreateController {
         questionRepository.deleteById(questionID);
         return "redirect:/create/" + surveyID;
     }
+
+    @PostMapping("/create/{surveyID}/question/multiple-choice")
+    public String addMultipleChoiceQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @RequestParam("questionText") String questionText,
+            @RequestParam("options") List<String> options) {
+
+        Survey survey = surveyRepository.findById(surveyID);
+
+        MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion();
+        newQuestion.setQuestion(questionText);
+        newQuestion.setOptions(options);
+
+        survey.addQuestion(newQuestion);
+
+        surveyRepository.save(survey);
+
+        return "redirect:/create/" + surveyID;
+    }
+
 }
