@@ -129,5 +129,65 @@ public class ControllerIntegrationTest {
                 .andExpect(view().name("summary"))
                 .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))));
     }
+
+    @Test
+    public void testAddMultipleChoiceQuestion() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
+                .andDo(result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    // Add a multiple-choice question to the survey
+                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
+                                    .param("questionText", "What is your favorite color?")
+                                    .param("options", "Red", "Blue", "Green"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/create/" + surveyId));
+
+                    // Verify the question is added with the correct options
+                    mockMvc.perform(get("/create/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("create"))
+                            .andExpect(model().attributeExists("survey"))
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasSize(1))))
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasItem(
+                                    allOf(
+                                            hasProperty("question", equalTo("What is your favorite color?")),
+                                            hasProperty("options", containsInAnyOrder("Red", "Blue", "Green"))
+                                    )
+                            ))));
+                });
+    }
+
+    @Test
+    public void testDeleteMultipleChoiceQuestion() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
+                .andDo(result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    // Add a multiple-choice question
+                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
+                                    .param("questionText", "What is your favorite color?")
+                                    .param("options", "Red", "Blue", "Green"))
+                            .andExpect(status().is3xxRedirection());
+
+                    // Delete the question
+                    mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/create/" + surveyId));
+
+                    // Verify the question is deleted
+                    mockMvc.perform(get("/create/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
+                });
+    }
 }
 
