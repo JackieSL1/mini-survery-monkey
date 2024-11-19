@@ -5,6 +5,7 @@
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
         <link rel="stylesheet" type="text/css" media="all"
               href="/css/style.css" th:href="@{/css/style.css}">
+        <script src="/js/multipleChoiceQuestion.js"></script>
     </head>
     <body>
         <p><a href="../home">Home</a></p>
@@ -88,29 +89,6 @@
                 </p>
             </form>
         </div>
-
-        <script>
-            // Function to show the multiple-choice form
-            function showMultipleChoiceForm() {
-                document.getElementById('multipleChoiceForm').style.display = 'block';
-            }
-
-            // Function to dynamically add an answer choice
-            function addChoice() {
-                const container = document.getElementById('answerChoices');
-                const choice = document.createElement('p');
-                choice.innerHTML = `
-            <input type="text" name="options" placeholder="Enter an answer choice" required/>
-            <button type="button" onclick="removeChoice(this)">-</button>
-        `;
-                container.appendChild(choice);
-            }
-
-            // Function to remove a specific answer choice input field
-            function removeChoice(button) {
-                button.parentElement.remove();
-            }
-        </script>
     </body>
 </html>
 
