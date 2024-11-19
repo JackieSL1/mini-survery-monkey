@@ -8,6 +8,14 @@
     </head>
     <body>
         <p><a href="../home">Home</a></p>
+        <h2 th:text="${survey.getTitle()}"></h2>
+        <!-- Survey questions -->
+        <ol>
+            <li th:each="question : ${survey.questions}">
+                <p th:text="${question.getQuestion()}"></p>
+            </li>
+        </ol>
+
         <!-- Close survey -->
         <div th:if="${survey.getState().toString() == 'OPEN'}">
             <form method="post"
@@ -16,13 +24,5 @@
                 <p><input type="submit" value="Close Survey"/></p>
             </form>
         </div>
-        <h2 th:text="${survey.getTitle()}"></h2>
-
-        <!-- Survey questions -->
-        <ol>
-            <li th:each="question : ${survey.questions}">
-                <p th:text="${question.getQuestion()}"></p>
-            </li>
-        </ol>
     </body>
 </html>
