@@ -26,4 +26,14 @@ public class SummaryController {
 
         return "summary";
     }
+
+    @PostMapping("/summary/{surveyID}/close")
+    public String closeSurvey(@PathVariable("surveyID") int surveyID, Model model) {
+        Survey survey = surveyRepository.findById(surveyID);
+        survey.setState(State.CLOSED);
+
+        surveyRepository.save(survey);
+
+        return "redirect:/summary/" + surveyID;
+    }
 }
