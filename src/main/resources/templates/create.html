@@ -9,13 +9,47 @@
     <body>
         <p><a href="../home">Home</a></p>
 
+        <!-- Update survey title -->
         <form method="post"
               th:action="@{/create/{id}/update(id=${survey.getId()})}"
               th:object="${survey}">
-            <!--Update survey title-->
             <p>Title:<br><input th:field="*{title}" type="text"/></p>
-            <!--Save survey-->
             <p><input type="submit" value="Save"/></p>
+        </form>
+
+        <!-- Survey questions -->
+        <h3>Questions</h3>
+        <ul>
+            <li th:each="question : ${survey.questions}">
+
+                <!-- Save question -->
+                <form method="post"
+                      th:action="@{/create/{surveyID}/question/{questionID}/update(surveyID=${survey.getId()}, questionID=${question.id})}">
+                    <input type="text" name="newQuestionText" placeholder="Edit question" th:value="${question.question}" />
+                    <input type="submit" value="Save" />
+                </form>
+
+                <!-- Delete question -->
+                <form method="post"
+                      th:action="@{/create/{surveyID}/question/{questionID}/delete(surveyID=${survey.getId()}, questionID=${question.id})}">
+                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this question?');"/>
+                </form>
+            </li>
+        </ul>
+
+        <!-- Add new question to survey -->
+        <form method="post"
+              th:action="@{/create/{id}/question(id=${survey.getId()})}">
+            <p><button type="submit" value="Add Question">Add question</button></p>
+        </form>
+
+        <!-- Open survey title -->
+        <form method="post"
+              th:action="@{/create/{id}/open(id=${survey.getId()})}"
+              th:object="${survey}">
+            <p><input type="submit" value="Open Survey"/></p>
         </form>
     </body>
 </html>
+
+

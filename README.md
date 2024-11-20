@@ -13,7 +13,7 @@ The world's second most popular survey platform.
 <p>
 
 <p align="center">
-<a href="https://mini-survey-monkey-eyd6fhfyesf6ezay.canadaeast-01.azurewebsites.net/home">🌐 Web App</a> |
+<a href="https://mini-survey-monkey-eyd6fhfyesf6ezay.canadaeast-01.azurewebsites.net/">🌐 Web App</a> |
 <a href="https://mini-survey-monkey-eyd6fhfyesf6ezay.canadaeast-01.azurewebsites.net/banana">🍌 Banana</a>
 </p>
 
@@ -26,6 +26,7 @@ The world's second most popular survey platform.
 - [Scope](#scope)
 - [Use cases](#use-cases)
 - [DB schema](#db-schema)
+- [UML class Diagram](#uml-class-diagram-for-models)
 - [Page descriptions](#page-descriptions)
 
 </details>
@@ -104,6 +105,12 @@ User should be able to share their survey and collect responses.
 The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
 
 ![DB schema](diagrams/db-schema.svg)
+
+## UML class Diagram for Models
+The following diagram can be updated by editing the corresponding drawio file in diagrams and then exporting the drawing
+to png.
+
+![UML class Diagram for Models](diagrams/ModelUML.drawio.svg)
 
 ## Page descriptions
 Short descriptions of what each page does.

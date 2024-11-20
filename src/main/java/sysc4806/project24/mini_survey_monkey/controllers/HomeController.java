@@ -1,4 +1,4 @@
-package sysc4806.project24.mini_survey_monkey;
+package sysc4806.project24.mini_survey_monkey.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +12,11 @@ public class HomeController {
 
     public HomeController(SurveyRepository surveyRepository) {
         this.surveyRepository = surveyRepository;
+    }
+
+    @GetMapping("/")
+    public String root(Model model) {
+        return "redirect:/home"; // TODO: redirect to login page once implemented
     }
 
     @GetMapping("/home")

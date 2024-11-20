@@ -2,7 +2,7 @@ package sysc4806.project24.mini_survey_monkey.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Survey {
@@ -15,11 +15,11 @@ public class Survey {
 
     private String title;
 
-    @OneToOne
+    @ManyToOne
     private User user;
 
-    @OneToMany
-    private List<Question> questions;
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     private State state;
 
@@ -73,4 +73,10 @@ public class Survey {
     public void setState(State state) {
         this.state = state;
     }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+        question.setSurvey(this);
+    }
+
 }

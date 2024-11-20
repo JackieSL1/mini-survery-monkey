@@ -2,6 +2,7 @@ package sysc4806.project24.mini_survey_monkey.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +15,17 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany
+    private List<Survey> surveys;
+
+    public List<Survey> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<Survey> surveys) {
+        this.surveys = surveys;
+    }
 
     public int getId() {
         return id;
