@@ -19,11 +19,20 @@ public class SignUpTest {
 
     @Test
     public void testSignUpWhenUserDoesntExist() throws Exception {
+        String username = "Ann Darrow";
+        String password = "i<3kingkong";
+
         // Should redirect to login page
         mockMvc.perform(post("/signup").
-                        param("username", "Ann Darrow").
-                        param("password", "i<3kingkong"))
+                        param("username", username).
+                        param("password", password))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/login"));
+
+        // Should not allow a duplicate user to be created
+        mockMvc.perform(post("/signup").
+                        param("username", username).
+                        param("password", password))
+                .andExpect(status().is5xxServerError());
     }
 }
