@@ -9,6 +9,8 @@
 <body>
     <p><a href="../home">Home</a></p>
 
+    <h2 th:text="${survey.getTitle()}"></h2>
+
     <!-- Go to the summary page -->
     <form method="get"
           th:action="@{/collect/{id}/summary(id=${survey.getId()})}"
