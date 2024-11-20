@@ -4,9 +4,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import sysc4806.project24.mini_survey_monkey.models.User;
+import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Controller
 public class SignUpController {
+
+    private final UserRepository userRepository;
+
+    public SignUpController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/signup")
     public String displayForm(Model model) {
@@ -14,7 +23,13 @@ public class SignUpController {
     }
 
     @PostMapping("/signup")
-    public String createAccount(Model model) {
+    public String createAccount(
+            Model model,
+            @RequestParam("username") String username,
+            @RequestParam("password") String password
+            ) {
+        User u = new User(username, password);
+        userRepository.save(u);
         return "redirect:/login";
     }
 }
