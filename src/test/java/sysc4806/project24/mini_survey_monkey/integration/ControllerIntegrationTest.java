@@ -116,7 +116,7 @@ public class ControllerIntegrationTest {
             // Now, open the survey, and confirm a redirect to /summary
             mockMvc.perform(post("/create/" + surveyId + "/open"))
                     .andExpect(status().is3xxRedirection())
-                    .andExpect(header().string("Location", "/summary/" + surveyId));
+                    .andExpect(header().string("Location", "/collect/" + surveyId));
 
             // Verify that /create/id and /create/id/update return 404s
             mockMvc.perform(post("/create/" + surveyId))
