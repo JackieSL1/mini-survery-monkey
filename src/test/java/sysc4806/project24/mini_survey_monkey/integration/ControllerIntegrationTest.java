@@ -190,7 +190,13 @@ public class ControllerIntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(view().name("summary"))
                     .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
-                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))));
+                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))))
+                    .andDo(result1 -> {
+                        String linkUrl = "/home";
+                        mockMvc.perform(get(linkUrl))
+                                .andExpect(status().isOk())
+                                .andExpect(view().name("home"));
+                    });
         });
     }
 }
