@@ -32,7 +32,7 @@
                            th:href="@{/collect/{id}(id=${survey.getId()})}"
                            th:text="|${survey.getTitle()}|"
                         ></a>
-                        <a th:case="'CLOSED''"
+                        <a th:case="*"
                            th:href="@{summary/{id}(id=${survey.getId()})}"
                            th:text="|${survey.getTitle()}|"
                         ></a>
