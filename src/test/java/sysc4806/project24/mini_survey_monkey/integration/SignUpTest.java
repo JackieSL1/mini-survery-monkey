@@ -20,7 +20,9 @@ public class SignUpTest {
     @Test
     public void testSignUpWhenUserDoesntExist() throws Exception {
         // Should redirect to login page
-        mockMvc.perform(post("/signup"))
+        mockMvc.perform(post("/signup").
+                        param("username", "Ann Darrow").
+                        param("password", "i<3kingkong"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/login"));
     }
