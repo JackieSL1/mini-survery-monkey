@@ -34,6 +34,6 @@ public class SignUpTest {
         mockMvc.perform(post("/signup").
                         param("username", username).
                         param("password", password))
-                .andExpect(content().string(containsString("Create an account")));
+                .andExpect(content().string(containsString("ERROR: Username is already taken")));
     }
 }

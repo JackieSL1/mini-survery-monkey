@@ -31,6 +31,7 @@ public class SignUpController {
         User u = new User(username, password);
 
         if (userRepository.findByUsername(username) != null) {
+            model.addAttribute("error", "ERROR: Username is already taken");
             return "signup";
         } else {
             userRepository.save(u);
