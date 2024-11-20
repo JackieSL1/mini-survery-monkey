@@ -29,7 +29,12 @@ public class SignUpController {
             @RequestParam("password") String password
             ) {
         User u = new User(username, password);
-        userRepository.save(u);
-        return "redirect:/login";
+
+        if (userRepository.findByUsername(username) != null) {
+            return "signup";
+        } else {
+            userRepository.save(u);
+            return "redirect:/login";
+        }
     }
 }

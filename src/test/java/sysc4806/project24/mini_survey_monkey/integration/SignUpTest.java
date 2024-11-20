@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -18,7 +18,7 @@ public class SignUpTest {
     MockMvc mockMvc;
 
     @Test
-    public void testSignUpWhenUserDoesntExist() throws Exception {
+    public void testSignUpForNewUser() throws Exception {
         String username = "Ann Darrow";
         String password = "i<3kingkong";
 
@@ -30,9 +30,10 @@ public class SignUpTest {
                 .andExpect(header().string("Location", "/login"));
 
         // Should not allow a duplicate user to be created
+        // and send user back to sign up page
         mockMvc.perform(post("/signup").
                         param("username", username).
                         param("password", password))
-                .andExpect(status().is5xxServerError());
+                .andExpect(content().string(containsString("Create an account")));
     }
 }
