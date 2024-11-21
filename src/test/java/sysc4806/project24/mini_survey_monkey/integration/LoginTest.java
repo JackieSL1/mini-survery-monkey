@@ -18,9 +18,18 @@ public class LoginTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testLoginWithValidUser() throws Exception {
+    public void testLoginWithExistingUser() throws Exception {
+        // Set up
+        String username = "Jane Goodall";
+        String password = "primatology4life";
+
+        mockMvc.perform(post("/signup")
+                .param("username", username)
+                .param("password", password));
+
         // Should redirect to home page after successful log in
-        mockMvc.perform(post("/login/authenticate"))
+        mockMvc.perform(post("/login/authenticate")
+                        .param("username", username))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/home"));
     }
