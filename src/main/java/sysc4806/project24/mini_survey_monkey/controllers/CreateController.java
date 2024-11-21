@@ -111,5 +111,62 @@ public class CreateController {
 
         return "redirect:/create/" + surveyID;
     }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/update")
+    public String updateOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("optionIndex") int optionIndex,
+            @RequestParam("updatedOption") String updatedOption) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Update the specific option
+        List<String> options = question.getOptions();
+        if (optionIndex >= 0 && optionIndex < options.size()) {
+            options.set(optionIndex, updatedOption);
+            question.setOptions(options); // Update the question's options
+            questionRepository.save(question); // Save changes to the database
+        }
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
+    }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/delete")
+    public String deleteOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("optionIndex") int optionIndex) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Remove the option at the specified index
+        List<String> options = question.getOptions();
+        if (optionIndex >= 0 && optionIndex < options.size()) {
+            options.remove(optionIndex); // Remove the option from the list
+            question.setOptions(options); // Update the question's options
+            questionRepository.save(question); // Save the changes to the database
+        }
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
+    }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/add")
+    public String addOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("newOption") String newOption) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Add the new option to the list of options
+        List<String> options = question.getOptions();
+        options.add(newOption); // Add the new option to the list
+
+        question.setOptions(options); // Update the question's options list
+        questionRepository.save(question); // Save the changes to the database
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
+    }
 
 }
