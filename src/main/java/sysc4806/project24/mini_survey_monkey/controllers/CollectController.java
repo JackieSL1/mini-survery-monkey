@@ -23,11 +23,4 @@ public class CollectController {
 
         return "collect";
     }
-
-    @GetMapping("/collect/{surveyID}/summary")
-    public String summary(@PathVariable("surveyID") int surveyID) {
-
-        return "redirect:/summary/" + surveyID;
-    }
-
 }
