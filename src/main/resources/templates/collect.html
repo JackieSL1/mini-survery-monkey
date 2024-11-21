@@ -11,6 +11,8 @@
 
     <h2 th:text="${survey.getTitle()}"></h2>
 
+    <p>Copy this URL: <span th:text="${sharingLink.getLink()}"></span></p>
+
     <!-- Go to the summary page -->
     <form method="get"
           th:action="@{/summary/{id}(id=${survey.getId()})}"
