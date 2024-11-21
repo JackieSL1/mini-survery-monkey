@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,5 +32,15 @@ public class LoginTest {
                         .param("username", username))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/home"));
+    }
+
+    @Test
+    public void testLoginWithNonExistingUser() throws Exception {
+        String username = "Clifford";
+
+        mockMvc.perform(post("/login/authenticate")
+                        .param("username", username))
+                .andExpect(content().string(containsString("ERROR: Username not found.")));
+
     }
 }

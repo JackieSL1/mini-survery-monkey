@@ -26,7 +26,7 @@ public class LoginController {
             Model model,
             @RequestParam("username") String username) {
         if (userRepository.findByUsername(username) == null) {
-            model.addAttribute("error", "ERROR: Invalid username.");
+            model.addAttribute("error", "ERROR: Username not found.");
             return "login";
         } else {
             return "redirect:/home";
