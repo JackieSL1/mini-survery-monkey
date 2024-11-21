@@ -25,10 +25,14 @@
                 <td>
                     <div th:switch="${survey.getState().toString()}">
                         <a th:case="'DRAFT'"
-                                th:href="@{/create/{id}(id=${survey.getId()})}"
-                                th:text="|${survey.getTitle()}|"
+                           th:href="@{/create/{id}(id=${survey.getId()})}"
+                           th:text="|${survey.getTitle()}|"
                         ></a>
-                        <a th:case="*"
+                        <a th:case="'OPEN'"
+                           th:href="@{/collect/{id}(id=${survey.getId()})}"
+                           th:text="|${survey.getTitle()}|"
+                        ></a>
+                        <a th:case="'CLOSED'"
                            th:href="@{summary/{id}(id=${survey.getId()})}"
                            th:text="|${survey.getTitle()}|"
                         ></a>
