@@ -54,7 +54,7 @@ public class CreateController {
 
         surveyRepository.save(survey);
 
-        return "redirect:/summary/" + surveyID;
+        return "redirect:/collect/" + surveyID;
     }
 
     @PostMapping("/create/{surveyID}/question")

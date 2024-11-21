@@ -116,7 +116,7 @@ public class ControllerIntegrationTest {
             // Now, open the survey, and confirm a redirect to /summary
             mockMvc.perform(post("/create/" + surveyId + "/open"))
                     .andExpect(status().is3xxRedirection())
-                    .andExpect(header().string("Location", "/summary/" + surveyId));
+                    .andExpect(header().string("Location", "/collect/" + surveyId));
 
             // Verify that /create/id and /create/id/update return 404s
             mockMvc.perform(post("/create/" + surveyId))
@@ -190,7 +190,13 @@ public class ControllerIntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(view().name("summary"))
                     .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
-                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))));
+                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))))
+                    .andDo(result1 -> {
+                        String linkUrl = "/home";
+                        mockMvc.perform(get(linkUrl))
+                                .andExpect(status().isOk())
+                                .andExpect(view().name("home"));
+                    });
         });
     }
 }
