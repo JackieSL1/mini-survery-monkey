@@ -3,10 +3,7 @@ package sysc4806.project24.mini_survey_monkey.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sysc4806.project24.mini_survey_monkey.models.CommentQuestion;
-import sysc4806.project24.mini_survey_monkey.models.Question;
-import sysc4806.project24.mini_survey_monkey.models.State;
-import sysc4806.project24.mini_survey_monkey.models.Survey;
+import sysc4806.project24.mini_survey_monkey.models.*;
 import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
@@ -90,6 +87,56 @@ public class CreateController {
             @PathVariable("questionID") int questionID) {
 
         questionRepository.deleteById(questionID);
+        return "redirect:/create/" + surveyID;
+    }
+
+    @PostMapping("/create/{surveyID}/scale-question")
+    public String addScaleQuestion(@PathVariable("surveyID") int surveyID) {
+        // Retrieve the survey by ID
+        Survey survey = surveyRepository.findById(surveyID);
+
+        if (survey == null) {
+            throw new IllegalArgumentException("Survey not found");
+        }
+
+        // Create a new ScaleQuestion with default values
+        ScaleQuestion newScaleQuestion = new ScaleQuestion();
+        newScaleQuestion.setQuestion("New Scale Question"); // Default question text
+        newScaleQuestion.setMinValue(1); // Default minimum scale value
+        newScaleQuestion.setMaxValue(10); // Default maximum scale value
+
+        // Associate the question with the survey
+        survey.addQuestion(newScaleQuestion);
+
+        // Save the survey (cascade saves the new question)
+        surveyRepository.save(survey);
+
+        return "redirect:/create/" + surveyID;
+    }
+
+    @PostMapping("/create/{surveyID}/question/{questionID}/update-scale")
+    public String editScaleQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("newQuestionText") String newQuestionText,
+            @RequestParam(value = "minValue", required = false) Integer minValue,
+            @RequestParam(value = "maxValue", required = false) Integer maxValue,
+            @RequestParam(value = "minLabel", required = false) String minLabel,
+            @RequestParam(value = "maxLabel", required = false) String maxLabel) {
+
+        Question question = questionRepository.findById(questionID);
+
+        if (question instanceof ScaleQuestion) {
+            ScaleQuestion scaleQuestion = (ScaleQuestion) question;
+            scaleQuestion.setQuestion(newQuestionText);
+            if (minValue != null) scaleQuestion.setMinValue(minValue);
+            if (maxValue != null) scaleQuestion.setMaxValue(maxValue);
+        } else {
+            question.setQuestion(newQuestionText);
+        }
+
+        questionRepository.save(question);
+
         return "redirect:/create/" + surveyID;
     }
 }

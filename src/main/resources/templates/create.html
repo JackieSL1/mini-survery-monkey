@@ -21,7 +21,6 @@
         <h3>Questions</h3>
         <ul>
             <li th:each="question : ${survey.questions}">
-
                 <!-- Save question -->
                 <form method="post"
                       th:action="@{/create/{surveyID}/question/{questionID}/update(surveyID=${survey.getId()}, questionID=${question.id})}">
@@ -34,14 +33,38 @@
                       th:action="@{/create/{surveyID}/question/{questionID}/delete(surveyID=${survey.getId()}, questionID=${question.id})}">
                     <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this question?');"/>
                 </form>
+
+                <!-- Render scale for ScaleQuestion -->
+                <div th:if="${question.class.simpleName == 'ScaleQuestion'}">
+                    <!-- Render scale below Save/Delete -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; width: 100%; margin: 10px 0;">
+                            <span th:text="${question.minValue}">1</span>
+                            <div style="flex-grow: 1; display: flex; justify-content: space-evenly;">
+                                <input type="radio" th:id="'scale-' + ${question.id} + '-' + ${i}"
+                                       th:name="'scale-' + ${question.id}" th:value="${i}"
+                                       th:each="i : ${#numbers.sequence(question.minValue, question.maxValue)}">
+                            </div>
+                            <span th:text="${question.maxValue}">10</span>
+                        </div>
+                    </div>
+                </div>
+
             </li>
         </ul>
-
+        
         <!-- Add new question to survey -->
         <form method="post"
               th:action="@{/create/{id}/question(id=${survey.getId()})}">
             <p><button type="submit" value="Add Question">Add question</button></p>
         </form>
+
+        <!-- Add scale question -->
+        <form method="post"
+              th:action="@{/create/{id}/scale-question(id=${survey.getId()})}">
+            <p><button type="submit">Add Scale Question</button></p>
+        </form>
+
 
         <!-- Open survey title -->
         <form method="post"
@@ -49,6 +72,10 @@
               th:object="${survey}">
             <p><input type="submit" value="Open Survey"/></p>
         </form>
+
+
+
+
     </body>
 </html>
 
