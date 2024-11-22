@@ -216,7 +216,7 @@ public class ControllerIntegrationTest {
                             .andExpect(content().string(containsString("Copy this URL: ")));
                     mockMvc.perform(get("/r/1"))
                             .andExpect(status().isOk())
-                            .andExpect(view().name("fill-in"));
+                            .andExpect(view().name("respond"));
                 }
                 );
     }
