@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
+import sysc4806.project24.mini_survey_monkey.interceptors.CollectInterceptor;
 import sysc4806.project24.mini_survey_monkey.interceptors.CreateInterceptor;
 import sysc4806.project24.mini_survey_monkey.interceptors.SummaryInterceptor;
 
@@ -24,6 +25,8 @@ public class BananaMockTest {
     // This prevents the interceptors from being loaded
     @MockBean
     private CreateInterceptor createInterceptor;
+    @MockBean
+    private CollectInterceptor collectInterceptor;
     @MockBean
     private SummaryInterceptor summaryInterceptor;
 
