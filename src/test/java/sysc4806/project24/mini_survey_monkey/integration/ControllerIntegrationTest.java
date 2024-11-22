@@ -211,9 +211,10 @@ public class ControllerIntegrationTest {
                     int surveyId = Integer.parseInt(location.split("/")[2]);
 
                     // Add a multiple-choice question to the survey
-                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
+                    mockMvc.perform(post("/create/" + surveyId + "/question/add")
                                     .param("questionText", "What is your favorite color?")
-                                    .param("options", "Red", "Blue", "Green"))
+                                    .param("options", "Red", "Blue", "Green")
+                                    .param("type", "multiple-choice"))
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/create/" + surveyId));
 
@@ -243,9 +244,10 @@ public class ControllerIntegrationTest {
                     int surveyId = Integer.parseInt(location.split("/")[2]);
 
                     // Add a multiple-choice question
-                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
+                    mockMvc.perform(post("/create/" + surveyId + "/question/add")
                                     .param("questionText", "What is your favorite color?")
-                                    .param("options", "Red", "Blue", "Green"))
+                                    .param("options", "Red", "Blue", "Green")
+                                    .param("type", "multiple-choice"))
                             .andExpect(status().is3xxRedirection());
 
                     // Delete the question
