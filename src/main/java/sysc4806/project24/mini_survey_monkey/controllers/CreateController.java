@@ -57,7 +57,7 @@ public class CreateController {
 
         surveyRepository.save(survey);
 
-        return "redirect:/summary/" + surveyID;
+        return "redirect:/collect/" + surveyID;
     }
 
     @PostMapping("/create/{surveyID}/question")
@@ -93,19 +93,34 @@ public class CreateController {
         return "redirect:/create/" + surveyID;
     }
 
-    @PostMapping("/create/{surveyID}/question/multiple-choice")
-    public String addMultipleChoiceQuestion(
+    @PostMapping("/create/{surveyID}/question/add")
+    public String addQuestion(
             @PathVariable("surveyID") int surveyID,
-            @RequestParam("questionText") String questionText,
-            @RequestParam("options") List<String> options) {
+            @RequestParam("type") String type,
+            @RequestParam(value = "questionText", required = false) String questionText,
+            @RequestParam(value = "options", required = false) List<String> options,
+            @RequestParam(value = "minValue", required = false) Integer minValue,
+            @RequestParam(value = "maxValue", required = false) Integer maxValue) {
 
         Survey survey = surveyRepository.findById(surveyID);
 
-        MultipleChoiceQuestion newQuestion = new MultipleChoiceQuestion();
-        newQuestion.setQuestion(questionText);
-        newQuestion.setOptions(options);
+        if (survey == null) {
+            throw new IllegalArgumentException("Survey not found");
+        }
 
-        survey.addQuestion(newQuestion);
+        // Add question based on type
+        if ("multiple-choice".equals(type)) {
+            MultipleChoiceQuestion mcQuestion = new MultipleChoiceQuestion();
+            mcQuestion.setQuestion(questionText != null ? questionText : "New Multiple Choice Question");
+            mcQuestion.setOptions(options != null ? options : Arrays.asList("Option 1", "Option 2"));
+            survey.addQuestion(mcQuestion);
+        } else if ("scale".equals(type)) {
+            ScaleQuestion scaleQuestion = new ScaleQuestion();
+            scaleQuestion.setQuestion(questionText != null ? questionText : "New Scale Question");
+            scaleQuestion.setMinValue(minValue != null ? minValue : 1);
+            scaleQuestion.setMaxValue(maxValue != null ? maxValue : 10);
+            survey.addQuestion(scaleQuestion);
+        }
 
         surveyRepository.save(survey);
 
@@ -169,4 +184,27 @@ public class CreateController {
         return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
     }
 
+    @PostMapping("/create/{surveyID}/question/{questionID}/update-scale")
+    public String editScaleQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("newQuestionText") String newQuestionText,
+            @RequestParam(value = "minValue", required = false) Integer minValue,
+            @RequestParam(value = "maxValue", required = false) Integer maxValue) {
+
+        Question question = questionRepository.findById(questionID);
+
+        if (question instanceof ScaleQuestion) {
+            ScaleQuestion scaleQuestion = (ScaleQuestion) question;
+            scaleQuestion.setQuestion(newQuestionText);
+            if (minValue != null) scaleQuestion.setMinValue(minValue);
+            if (maxValue != null) scaleQuestion.setMaxValue(maxValue);
+        } else {
+            question.setQuestion(newQuestionText);
+        }
+
+        questionRepository.save(question);
+
+        return "redirect:/create/" + surveyID;
+    }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Login</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+  <link href="/css/style.css" media="all" rel="stylesheet"
+        th:href="@{/css/style.css}" type="text/css">
+</head>
+  <body>
+    <!--Stubbed. Should redirect to sign up page.-->
+    <p>Don't have an account? <a href="./banana">Sign up</a></p>
+
+    <form method="post" action="/login/authenticate">
+      <h1>Log in</h1>
+      <p>Enter username:</p>
+      <p><input type="text" name="username"/></p>
+      <p>Enter password:</p>
+      <p><input type="text" name="password"/></p>
+      <p><input type="submit" value="Log in"/></p>
+    </form>
+  </body>
+</html>
