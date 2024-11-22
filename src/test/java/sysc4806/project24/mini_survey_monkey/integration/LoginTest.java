@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -18,10 +18,29 @@ public class LoginTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testLoginWithValidUser() throws Exception {
+    public void testLoginWithExistingUser() throws Exception {
+        // Set up
+        String username = "Jane Goodall";
+        String password = "primatology4life";
+
+        mockMvc.perform(post("/signup")
+                .param("username", username)
+                .param("password", password));
+
         // Should redirect to home page after successful log in
-        mockMvc.perform(post("/login/authenticate"))
+        mockMvc.perform(post("/login/authenticate")
+                        .param("username", username))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/home"));
+    }
+
+    @Test
+    public void testLoginWithNonExistingUser() throws Exception {
+        String username = "Clifford";
+
+        mockMvc.perform(post("/login/authenticate")
+                        .param("username", username))
+                .andExpect(content().string(containsString("ERROR: Username not found.")));
+
     }
 }
