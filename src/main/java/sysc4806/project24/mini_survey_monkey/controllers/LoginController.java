@@ -24,12 +24,22 @@ public class LoginController {
     @PostMapping("/login/authenticate")
     public String authenticate(
             Model model,
-            @RequestParam("username") String username) {
+            @RequestParam("username") String username,
+            @RequestParam("password") String password) {
+        boolean authenticated = false;
+
         if (userRepository.findByUsername(username) == null) {
             model.addAttribute("error", "ERROR: Username not found.");
-            return "login";
+        } else if (!userRepository.findByUsername(username).getPassword().equals(password)) {
+            model.addAttribute("error", "ERROR: Invalid password.");
         } else {
+            authenticated = true;
+        }
+
+        if (authenticated) {
             return "redirect:/home";
+        } else {
+            return "login";
         }
     }
 }
