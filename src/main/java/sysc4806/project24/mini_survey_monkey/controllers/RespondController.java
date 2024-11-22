@@ -13,7 +13,7 @@ public class RespondController {
     }
 
     @GetMapping("/r/1")
-    public String fillIn() {
+    public String respond() {
 
         return "respond";
     }
