@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title th:text="|${survey.getTitle()} Collect|">Survey</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="/css/style.css" media="all" rel="stylesheet"
+          th:href="@{/css/style.css}" type="text/css">
+</head>
+<body>
+    <p><a href="../home">Home</a></p>
+
+    <h2 th:text="${survey.getTitle()}"></h2>
+
+    <!-- Go to the summary page -->
+    <form method="get"
+          th:action="@{/summary/{id}(id=${survey.getId()})}"
+          th:object="${survey}">
+        <p><input type="submit" value="See Summary"/></p>
+    </form>
+</body>
+</html>
