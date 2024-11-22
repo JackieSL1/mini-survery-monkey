@@ -199,5 +199,24 @@ public class ControllerIntegrationTest {
                     });
         });
     }
+
+    @Test
+    public void testNavigatingToSharingLink() throws Exception {
+        int initialSurveyId = 1;
+        mockMvc.perform(post("/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", startsWith("/create/")));
+
+        mockMvc.perform(post("/create/" + initialSurveyId + "/open"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/collect/" + initialSurveyId));
+        mockMvc.perform(get("/collect/" + initialSurveyId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("collect"))
+                .andExpect(content().string(containsString("Copy this URL: ")));
+        mockMvc.perform(get("/r/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("fill-in"));
+    }
 }
 
