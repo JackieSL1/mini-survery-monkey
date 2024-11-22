@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 @Controller
-public class FillInController {
+public class RespondController {
     private final SurveyRepository surveyRepository;
 
     public FillInController(SurveyRepository surveyRepository) {
