@@ -27,19 +27,28 @@ public class LoginTest {
                 .param("username", username)
                 .param("password", password));
 
+        // Should not log in user if password incorrect
+        mockMvc.perform(post("/login/authenticate")
+                .param("username", username)
+                .param("password", "primatology3life"))
+                        .andExpect(content().string(containsString("ERROR: Invalid password.")));
+
         // Should redirect to home page after successful log in
         mockMvc.perform(post("/login/authenticate")
-                        .param("username", username))
+                        .param("username", username)
+                        .param("password", password))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/home"));
     }
 
     @Test
     public void testLoginWithNonExistingUser() throws Exception {
-        String username = "Clifford";
+        String username = "sarvesh";
+        String password = "bluelagoon";
 
         mockMvc.perform(post("/login/authenticate")
-                        .param("username", username))
+                        .param("username", username)
+                        .param("password", password))
                 .andExpect(content().string(containsString("ERROR: Username not found.")));
 
     }
