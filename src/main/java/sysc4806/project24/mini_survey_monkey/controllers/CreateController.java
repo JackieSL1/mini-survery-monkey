@@ -120,9 +120,7 @@ public class CreateController {
             @PathVariable("questionID") int questionID,
             @RequestParam("newQuestionText") String newQuestionText,
             @RequestParam(value = "minValue", required = false) Integer minValue,
-            @RequestParam(value = "maxValue", required = false) Integer maxValue,
-            @RequestParam(value = "minLabel", required = false) String minLabel,
-            @RequestParam(value = "maxLabel", required = false) String maxLabel) {
+            @RequestParam(value = "maxValue", required = false) Integer maxValue) {
 
         Question question = questionRepository.findById(questionID);
 
