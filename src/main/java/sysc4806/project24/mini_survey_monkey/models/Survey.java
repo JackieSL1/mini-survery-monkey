@@ -23,6 +23,8 @@ public class Survey {
 
     private State state;
 
+    private String sharingLink;
+
     @Override
     public String toString() {
         return "Survey{" +
@@ -32,6 +34,14 @@ public class Survey {
                 ", questions=" + questions +
                 ", state=" + state +
                 '}';
+    }
+
+    public String getSharingLink() {
+        return sharingLink;
+    }
+
+    public void setSharingLink(String sharingLink) {
+        this.sharingLink = sharingLink;
     }
 
     public int getId() {
