@@ -50,6 +50,5 @@ public class LoginTest {
                         .param("username", username)
                         .param("password", password))
                 .andExpect(content().string(containsString("ERROR: Username not found.")));
-
     }
 }
