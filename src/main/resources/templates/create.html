@@ -8,34 +8,36 @@
     <script src="/js/multipleChoiceQuestion.js"></script>
 </head>
 <body>
-<p><a href="../home">Home</a></p>
+    <p><a href="../home">Home</a></p>
 
-<!-- Update survey title -->
-<form method="post"
-      th:action="@{/create/{id}/update(id=${survey.getId()})}"
-      th:object="${survey}">
-    <p>Title:<br>
-        <label>
-            <input th:field="*{title}" type="text"/>
-        </label>
-    </p>
-    <p>
-        <input type="submit" value="Save"/>
-    </p>
-</form>
+    <!-- Update survey title -->
+    <form method="post"
+          th:action="@{/create/{id}/update(id=${survey.getId()})}"
+          th:object="${survey}">
+        <p>
+            Title:<br>
+            <label>
+                <input th:field="*{title}" type="text"/>
+            </label>
+        </p>
+        <p>
+            <input type="submit" value="Save"/>
+        </p>
+    </form>
 
-<!-- Survey questions -->
-<h3>Questions</h3>
-<ul>
-    <li th:each="question : ${survey.questions}">
-        <!-- Display and edit question -->
-        <form method="post"
-              th:action="@{/create/{surveyID}/question/{questionID}/update(surveyID=${survey.getId()}, questionID=${question.id})}">
-            <p>
-                <input type="text" name="newQuestionText" placeholder="Edit question" th:value="${question.question}" />
-                <input type="submit" value="Save" />
-            </p>
-        </form>
+    <!-- Survey questions -->
+    <h3>Questions</h3>
+    <ul>
+        <li th:each="question : ${survey.questions}">
+
+            <!-- Display and edit question -->
+            <form method="post"
+                  th:action="@{/create/{surveyID}/question/{questionID}/update(surveyID=${survey.getId()}, questionID=${question.id})}">
+                <p>
+                    <input type="text" name="newQuestionText" placeholder="Edit question" th:value="${question.question}" />
+                    <input type="submit" value="Save" />
+                </p>
+            </form>
 
         <!-- Delete question -->
         <form method="post"
@@ -118,22 +120,21 @@
                 <span th:text="${question.maxValue}">10</span>
             </div>
         </div>
+            <hr/>
+        </li>
+    </ul>
 
-        <hr/>
-    </li>
-</ul>
+    <!-- Add new question to survey -->
+    <form method="post"
+          th:action="@{/create/{id}/question(id=${survey.getId()})}">
+        <p>
+            <button type="submit">Add Question</button>
+            <button type="button" onclick="showMultipleChoiceForm()">Add Multiple Choice Question</button>
+        </p>
+    </form>
 
-<!-- Add new question to survey -->
-<form method="post"
-      th:action="@{/create/{id}/question(id=${survey.getId()})}">
-    <p>
-        <button type="submit">Add Question</button>
-        <button type="button" onclick="showMultipleChoiceForm()">Add Multiple Choice Question</button>
-    </p>
-</form>
-
-<!-- Add new multiple-choice question form -->
-<div id="multipleChoiceForm" style="display: none;">
+    <!-- Add new multiple-choice question form -->
+    <div id="multipleChoiceForm" style="display: none;">
     <h3>Add Multiple Choice Question</h3>
     <form method="post"
           th:action="@{/create/{id}/question/add(id=${survey.getId()})}">
@@ -161,31 +162,31 @@
         </p>
     </form>
 
-</div>
-<form method="post" th:action="@{/create/{surveyID}/question/add(surveyID=${survey.getId()})}">
-    <p>
-        <label>Question Text:</label>
-        <input type="text" name="questionText" placeholder="Enter question text" required />
-    </p>
-    <p>
-        <label>Minimum Value:</label>
-        <input type="number" name="minValue" placeholder="Minimum value" value="1" required />
-    </p>
-    <p>
-        <label>Maximum Value:</label>
-        <input type="number" name="maxValue" placeholder="Maximum value" value="10" required />
-    </p>
-    <input type="hidden" name="type" value="scale" />
-    <p>
-        <button type="submit">Add Scale Question</button>
-    </p>
-</form>
+    </div>
+    <form method="post" th:action="@{/create/{surveyID}/question/add(surveyID=${survey.getId()})}">
+        <p>
+            <label>Question Text:</label>
+            <input type="text" name="questionText" placeholder="Enter question text" required />
+        </p>
+        <p>
+            <label>Minimum Value:</label>
+            <input type="number" name="minValue" placeholder="Minimum value" value="1" required />
+        </p>
+        <p>
+            <label>Maximum Value:</label>
+            <input type="number" name="maxValue" placeholder="Maximum value" value="10" required />
+        </p>
+        <input type="hidden" name="type" value="scale" />
+        <p>
+            <button type="submit">Add Scale Question</button>
+        </p>
+    </form>
 
-<!-- Open survey for responses -->
-<form method="post"
-      th:action="@{/create/{id}/open(id=${survey.getId()})}">
-    <p><input type="submit" value="Collect Responses"/></p>
-</form>
+    <!-- Open survey for responses -->
+    <form method="post"
+          th:action="@{/create/{id}/open(id=${survey.getId()})}">
+        <p><input type="submit" value="Collect Responses"/></p>
+    </form>
 </body>
 </html>
 
