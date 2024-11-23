@@ -1,22 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-  <title>Log in</title>
+  <title>Sign Up</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
   <link href="/css/style.css" media="all" rel="stylesheet"
         th:href="@{/css/style.css}" type="text/css">
 </head>
   <body>
-    <p>Don't have an account? <a href="./signup">Sign up</a></p>
+    <p>Already have an account? <a href="./login">Log in</a></p>
 
-    <form method="post" action="/login/authenticate">
-      <h1>Log in</h1>
+    <form method="post" action="/signup">
+      <h1>Create an account</h1>
       <p th:text="${error}"></p>
       <p>Enter username:</p>
       <p><input type="text" name="username"/></p>
       <p>Enter password:</p>
       <p><input type="text" name="password"/></p>
-      <p><input type="submit" value="Log in"/></p>
+      <p><input type="submit" value="Create account"/></p>
     </form>
   </body>
 </html>

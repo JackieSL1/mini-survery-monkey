@@ -19,6 +19,13 @@ public class User {
     @OneToMany
     private List<Survey> surveys;
 
+    public User() {}
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public List<Survey> getSurveys() {
         return surveys;
     }

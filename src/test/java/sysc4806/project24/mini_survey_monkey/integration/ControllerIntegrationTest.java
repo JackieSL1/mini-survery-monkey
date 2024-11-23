@@ -14,6 +14,7 @@ import sysc4806.project24.mini_survey_monkey.models.State;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -260,6 +261,40 @@ public class ControllerIntegrationTest {
                             .andExpect(status().isOk())
                             .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
                 });
+
+    public void testNavigatingToSharingLink() throws Exception {
+        mockMvc.perform(post("/create")).andDo(
+                result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+
+                    mockMvc.perform(post("/create/" + surveyId + "/open"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/collect/" + surveyId));
+
+                    mockMvc.perform(get("/collect/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("collect"))
+                            .andExpect(content().string(containsString("Copy this URL: ")));
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("respond"));
+
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is3xxRedirection());
+
+                    mockMvc.perform(get("/summary/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("summary"));
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+                }
+                );
     }
 }
 

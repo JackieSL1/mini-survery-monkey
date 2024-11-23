@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
 import sysc4806.project24.mini_survey_monkey.interceptors.CollectInterceptor;
 import sysc4806.project24.mini_survey_monkey.interceptors.CreateInterceptor;
+import sysc4806.project24.mini_survey_monkey.interceptors.ResponseInterceptor;
 import sysc4806.project24.mini_survey_monkey.interceptors.SummaryInterceptor;
 
 import static org.hamcrest.Matchers.containsString;
@@ -27,6 +28,8 @@ public class BananaMockTest {
     private CreateInterceptor createInterceptor;
     @MockBean
     private CollectInterceptor collectInterceptor;
+    @MockBean
+    private ResponseInterceptor responseInterceptor;
     @MockBean
     private SummaryInterceptor summaryInterceptor;
 
