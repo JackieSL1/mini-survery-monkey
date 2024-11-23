@@ -25,6 +25,7 @@ public class HomeController {
     public String home(
             Model model,
             @CookieValue(value=Constant.CookieKey.USERNAME, defaultValue="guest") String username) {
+        model.addAttribute("welcome", "Welcome " + username + "!");
         model.addAttribute("surveys", surveyRepository.findAll());
         return "home";
     }
