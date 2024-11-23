@@ -1,13 +1,11 @@
 package sysc4806.project24.mini_survey_monkey.integration;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import sysc4806.project24.mini_survey_monkey.models.State;
 
@@ -211,7 +209,8 @@ public class ControllerIntegrationTest {
                     int surveyId = Integer.parseInt(location.split("/")[2]);
 
                     // Add a multiple-choice question to the survey
-                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
+                    mockMvc.perform(post("/create/" + surveyId + "/question/add")
+                                    .param("type", "multiple-choice")
                                     .param("questionText", "What is your favorite color?")
                                     .param("options", "Red", "Blue", "Green"))
                             .andExpect(status().is3xxRedirection())
@@ -235,29 +234,31 @@ public class ControllerIntegrationTest {
     @Test
     public void testDeleteMultipleChoiceQuestion() throws Exception {
         // Create a survey
-        mockMvc.perform(post("/create"))
+        ResultActions createSurvey = mockMvc.perform(post("/create"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
-                .andDo(result -> {
-                    String location = result.getResponse().getHeader("Location");
-                    int surveyId = Integer.parseInt(location.split("/")[2]);
+                .andExpect(header().string("Location", matchesPattern("/create/\\d+")));
 
-                    // Add a multiple-choice question
-                    mockMvc.perform(post("/create/" + surveyId + "/question/multiple-choice")
-                                    .param("questionText", "What is your favorite color?")
-                                    .param("options", "Red", "Blue", "Green"))
-                            .andExpect(status().is3xxRedirection());
+        MvcResult result = createSurvey.andReturn(); // Capture the result
+        String location = result.getResponse().getHeader("Location");
+        int surveyId = Integer.parseInt(location.split("/")[2]);
 
-                    // Delete the question
-                    mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
-                            .andExpect(status().is3xxRedirection())
-                            .andExpect(header().string("Location", "/create/" + surveyId));
+        // Add a multiple-choice question
+        mockMvc.perform(post("/create/" + surveyId + "/question/add")
+                        .param("type", "multiple-choice")
+                        .param("questionText", "What is your favorite color?")
+                        .param("options", "Red", "Blue", "Green"))
+                .andExpect(status().is3xxRedirection());
 
-                    // Verify the question is deleted
-                    mockMvc.perform(get("/create/" + surveyId))
-                            .andExpect(status().isOk())
-                            .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
-                });
+        // Delete the question (assume the question ID is 1 for simplicity)
+        mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/create/" + surveyId));
+
+        // Verify the question is deleted
+        mockMvc.perform(get("/create/" + surveyId))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
     }
+
 }
 
