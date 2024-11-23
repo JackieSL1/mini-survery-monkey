@@ -25,15 +25,16 @@ public class CollectController {
         int serverPort = request.getServerPort(); // port number
         String contextPath = request.getContextPath(); // app context path, if any
 
+        Survey survey = surveyRepository.findById(surveyID);
+
         // Construct the full URL for /r/1
         String fullUrl;
         if (serverPort == 80 || serverPort == 443) {
-            fullUrl = scheme + "://" + serverName + contextPath + "/r/1";
+            fullUrl = scheme + "://" + serverName + contextPath + "/r/" + surveyID;
         } else {
-            fullUrl = scheme + "://" + serverName + ":" + serverPort + contextPath + "/r/1";
+            fullUrl = scheme + "://" + serverName + ":" + serverPort + contextPath + "/r/" + surveyID;
         }
 
-        Survey survey = surveyRepository.findById(surveyID);
 
         survey.setSharingLink(fullUrl);
         model.addAttribute("survey", survey);
