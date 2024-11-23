@@ -261,6 +261,7 @@ public class ControllerIntegrationTest {
                             .andExpect(status().isOk())
                             .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
                 });
+    }
 
     public void testNavigatingToSharingLink() throws Exception {
         mockMvc.perform(post("/create")).andDo(
