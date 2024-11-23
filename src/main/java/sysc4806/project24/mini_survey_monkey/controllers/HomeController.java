@@ -24,8 +24,7 @@ public class HomeController {
     @GetMapping("/home")
     public String home(
             Model model,
-            @CookieValue(name= Constant.CookieKey.USERNAME, defaultValue="") String username
-    ) {
+            @CookieValue(Constant.CookieKey.USERNAME) String username) {
         model.addAttribute("surveys", surveyRepository.findAll());
         return "home";
     }
