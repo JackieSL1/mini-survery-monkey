@@ -207,16 +207,32 @@ public class ControllerIntegrationTest {
                 result -> {
                     String location = result.getResponse().getHeader("Location");
                     int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+
                     mockMvc.perform(post("/create/" + surveyId + "/open"))
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/collect/" + surveyId));
+
                     mockMvc.perform(get("/collect/" + surveyId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("collect"))
                             .andExpect(content().string(containsString("Copy this URL: ")));
-                    mockMvc.perform(get("/r/1"))
+
+                    mockMvc.perform(get("/r/" + surveyId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("respond"));
+
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is3xxRedirection());
+
+                    mockMvc.perform(get("/summary/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("summary"));
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
                 }
                 );
     }
