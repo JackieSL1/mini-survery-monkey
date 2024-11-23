@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Controller
@@ -24,6 +25,7 @@ public class LoginController {
     @PostMapping("/login/authenticate")
     public String authenticate(
             Model model,
+            RedirectAttributes redirectAttributes,
             @RequestParam("username") String username,
             @RequestParam("password") String password) {
         boolean authenticated = false;
@@ -37,6 +39,7 @@ public class LoginController {
         }
 
         if (authenticated) {
+            redirectAttributes.addAttribute("username", username);
             return "redirect:/home";
         } else {
             return "login";

@@ -20,7 +20,7 @@ public class LoginTest {
     @Test
     public void testLoginWithExistingUser() throws Exception {
         // Set up
-        String username = "Jane Goodall";
+        String username = "janegoodall";
         String password = "primatology4life";
 
         mockMvc.perform(post("/signup")
@@ -38,7 +38,7 @@ public class LoginTest {
                         .param("username", username)
                         .param("password", password))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/home"));
+                .andExpect(header().string("Location", "/home?username=" + username));
     }
 
     @Test

@@ -21,7 +21,7 @@ public class HomeController {
         return "redirect:/home"; // TODO: redirect to login page once implemented
     }
 
-    @PostMapping("/home")
+    @GetMapping("/home")
     public String home(Model model,
                        @RequestParam("username") String username) {
         model.addAttribute("surveys", surveyRepository.findAll());

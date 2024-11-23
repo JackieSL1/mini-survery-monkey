@@ -27,7 +27,7 @@ public class ControllerIntegrationTest {
     @Test
     public void testHomePageDisplaysSurveys() throws Exception {
         // Perform GET request on /home
-        mockMvc.perform(post("/home")
+        mockMvc.perform(get("/home")
                         .param("username", "admin"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Welcome home!")))
@@ -195,7 +195,7 @@ public class ControllerIntegrationTest {
                     .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))))
                     .andDo(result1 -> {
                         String linkUrl = "/home";
-                        mockMvc.perform(post(linkUrl)
+                        mockMvc.perform(get(linkUrl)
                                         .param("username", "admin"))
                                 .andExpect(status().isOk())
                                 .andExpect(view().name("home"));
