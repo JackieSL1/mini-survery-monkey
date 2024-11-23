@@ -1,5 +1,7 @@
 package sysc4806.project24.mini_survey_monkey.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,7 @@ public class LoginController {
     @PostMapping("/login/authenticate")
     public String authenticate(
             Model model,
+            HttpServletResponse response,
             @RequestParam("username") String username,
             @RequestParam("password") String password) {
         boolean authenticated = false;
@@ -37,6 +40,8 @@ public class LoginController {
         }
 
         if (authenticated) {
+            Cookie cookie = new Cookie("username", username);
+            response.addCookie(cookie);
             return "redirect:/home";
         } else {
             return "login";
