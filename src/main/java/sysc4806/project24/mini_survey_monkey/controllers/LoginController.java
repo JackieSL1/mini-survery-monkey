@@ -37,6 +37,7 @@ public class LoginController {
         }
 
         if (authenticated) {
+            model.addAttribute("loggedInUser", username);
             return "redirect:/home";
         } else {
             return "login";
