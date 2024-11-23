@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Controller
@@ -40,7 +41,7 @@ public class LoginController {
         }
 
         if (authenticated) {
-            Cookie cookie = new Cookie("username", username);
+            Cookie cookie = new Cookie(Constant.CookieKey.USERNAME, username);
             response.addCookie(cookie);
             return "redirect:/home";
         } else {
