@@ -12,7 +12,7 @@ public abstract class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Response> responses;
 
     private String question;

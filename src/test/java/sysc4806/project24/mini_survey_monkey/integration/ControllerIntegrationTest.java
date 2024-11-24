@@ -1,20 +1,18 @@
 package sysc4806.project24.mini_survey_monkey.integration;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import sysc4806.project24.mini_survey_monkey.models.State;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -83,7 +81,8 @@ public class ControllerIntegrationTest {
                     mockMvc.perform(get("/create/" + surveyId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("create"))
-                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey Title"))));
+                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("Updated Survey " +
+                                    "Title"))));
                 });
     }
 
@@ -146,59 +145,59 @@ public class ControllerIntegrationTest {
     public void testClosingSurvey() throws Exception {
         // Create a survey
         mockMvc.perform(post("/create")).andDo(
-        result -> {
-            String location = result.getResponse().getHeader("Location");
-            int surveyId = Integer.parseInt(location.split("/")[2]);
+                result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
 
-            // /summary/id/close should initially be invalid
-            mockMvc.perform(post("/summary/" + surveyId + "/close"))
-                    .andExpect(status().is4xxClientError());
+                    // /summary/id/close should initially be invalid
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is4xxClientError());
 
-            // Now, update the title of the created survey
-            mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New Survey Title"));
+                    // Now, update the title of the created survey
+                    mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New Survey Title"));
 
-            // Open the survey
-            mockMvc.perform(post("/create/" + surveyId + "/open"));
+                    // Open the survey
+                    mockMvc.perform(post("/create/" + surveyId + "/open"));
 
-            // Close the survey, and confirm a redirect
-            mockMvc.perform(post("/summary/" + surveyId + "/close"))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(header().string("Location", "/summary/" + surveyId));
+                    // Close the survey, and confirm a redirect
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/summary/" + surveyId));
 
-            // Verify that /create/id and /create/id/update return 404s
-            mockMvc.perform(post("/create/" + surveyId))
-                    .andExpect(status().is4xxClientError());
-            mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New New Survey Title"))
-                    .andExpect(status().is4xxClientError());
+                    // Verify that /create/id and /create/id/update return 404s
+                    mockMvc.perform(post("/create/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+                    mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "New New Survey Title"))
+                            .andExpect(status().is4xxClientError());
 
-            // /create should still work
-            mockMvc.perform(post("/create"))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(header().string("Location", startsWith("/create/")));
+                    // /create should still work
+                    mockMvc.perform(post("/create"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", startsWith("/create/")));
 
-            // /summary/id should still be valid
-            mockMvc.perform(get("/summary/" + surveyId))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("summary"))
-                    .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
-                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))));
+                    // /summary/id should still be valid
+                    mockMvc.perform(get("/summary/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("summary"))
+                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
+                            .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))));
 
-            // /summary/id/close should leave the survey in a closed state
-            mockMvc.perform(post("/summary/" + surveyId + "/close"))
-                    .andExpect(status().is3xxRedirection());
+                    // /summary/id/close should leave the survey in a closed state
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is3xxRedirection());
 
-            mockMvc.perform(get("/summary/" + surveyId))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("summary"))
-                    .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
-                    .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))))
-                    .andDo(result1 -> {
-                        String linkUrl = "/home";
-                        mockMvc.perform(get(linkUrl))
-                                .andExpect(status().isOk())
-                                .andExpect(view().name("home"));
-                    });
-        });
+                    mockMvc.perform(get("/summary/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("summary"))
+                            .andExpect(model().attribute("survey", hasProperty("title", equalTo("New Survey Title"))))
+                            .andExpect(model().attribute("survey", hasProperty("state", equalTo(State.CLOSED))))
+                            .andDo(result1 -> {
+                                String linkUrl = "/home";
+                                mockMvc.perform(get(linkUrl))
+                                        .andExpect(status().isOk())
+                                        .andExpect(view().name("home"));
+                            });
+                });
     }
 
     @Test
@@ -252,7 +251,14 @@ public class ControllerIntegrationTest {
                             .andExpect(status().is3xxRedirection());
 
                     // Delete the question
-                    mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
+                    String responseHTML =
+                            mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
+                    Pattern pattern = Pattern.compile("/create/" + surveyId + "/question/(\\d)/update");
+                    Matcher matcher = pattern.matcher(responseHTML);
+                    assert matcher.find();
+                    String questionID = matcher.group(1);
+
+                    mockMvc.perform(post("/create/" + surveyId + "/question/" + questionID + "/delete"))
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/create/" + surveyId));
 
@@ -261,41 +267,6 @@ public class ControllerIntegrationTest {
                             .andExpect(status().isOk())
                             .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
                 });
-    }
-
-    public void testNavigatingToSharingLink() throws Exception {
-        mockMvc.perform(post("/create")).andDo(
-                result -> {
-                    String location = result.getResponse().getHeader("Location");
-                    int surveyId = Integer.parseInt(location.split("/")[2]);
-
-                    mockMvc.perform(get("/r/" + surveyId))
-                            .andExpect(status().is4xxClientError());
-
-                    mockMvc.perform(post("/create/" + surveyId + "/open"))
-                            .andExpect(status().is3xxRedirection())
-                            .andExpect(header().string("Location", "/collect/" + surveyId));
-
-                    mockMvc.perform(get("/collect/" + surveyId))
-                            .andExpect(status().isOk())
-                            .andExpect(view().name("collect"))
-                            .andExpect(content().string(containsString("Copy this URL: ")));
-
-                    mockMvc.perform(get("/r/" + surveyId))
-                            .andExpect(status().isOk())
-                            .andExpect(view().name("respond"));
-
-                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
-                            .andExpect(status().is3xxRedirection());
-
-                    mockMvc.perform(get("/summary/" + surveyId))
-                            .andExpect(status().isOk())
-                            .andExpect(view().name("summary"));
-
-                    mockMvc.perform(get("/r/" + surveyId))
-                            .andExpect(status().is4xxClientError());
-                }
-                );
     }
 }
 
