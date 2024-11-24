@@ -33,12 +33,13 @@ The world's second most popular survey platform.
 
 ## Current State
 The project now includes a survey management system with user authentication. 
-Users can create accounts using unique usernames and securely log in to their accounts using their corresponding passwords. 
-Once logged in, users are directed to a homepage displaying their surveys, with the option to create new surveys or edit existing ones. 
+Users can create accounts using unique usernames and log in to their accounts using their corresponding passwords. 
+Once logged in, users are directed to a homepage displaying their surveys with the option to create new surveys. 
 Surveys include titles, comments, multiple-choice questions, and scale questions. 
-Each survey has a defined state (Draft, Open, or Closed), and when opened, a unique, shareable link is generated for collecting responses. 
-The system supports storing comment responses in a database and provides a summary page for opened surveys, displaying questions and basic analytics for comments responses. 
-This functionality ensures a seamless workflow for survey creation, sharing, and analysis. 
+Each survey has a defined state (Draft, Open, or Closed).
+When a survey is opened a unique, shareable link is generated for collecting responses. 
+The system supports storing comment responses in a database.
+The summary page for a survey displays questions and all comment responses. 
 The application is deployed on Azure with GitHub Actions handling deployment processes.
 
 In Milestone 3, the project will fully support collecting and storing responses for scale questions and multiple-choice questions in the database. 
