@@ -20,6 +20,16 @@
                         <li th:each="option : ${question.options}" th:text="${option}"></li>
                     </ul>
                 </div>
+
+                <!-- Display responses if the question is a CommentQuestion -->
+                <div th:if="${#strings.equals(question.class.simpleName, 'CommentQuestion')}">
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.commentResponses}" th:text="${response.text}">
+                            <!-- Display each response -->
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ol>
 
