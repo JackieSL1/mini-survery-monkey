@@ -30,10 +30,11 @@ public class CreateController {
 
     @PostMapping("/create")
     public String create(@CookieValue(value=Constant.CookieKey.USERNAME, defaultValue=Constant.GUEST_USERNAME) String username) {
-
-        // check if guest is creating survey
+        // If cookie is missing, assume that a guest is logged in.
+        //
+        // Check if guest is creating survey.
         if (username.equals(Constant.GUEST_USERNAME)) {
-            // create guest account if it doesn't exist
+            // Create guest account if it doesn't exist.
             if (userRepository.findByUsername(username) == null) {
                 userRepository.save(new User(Constant.GUEST_USERNAME, Constant.GUEST_USERNAME));
             }
