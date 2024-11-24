@@ -32,9 +32,9 @@ The world's second most popular survey platform.
 </details>
 
 ## Current State
-The project includes a home page with all surveys, where new surveys can be created, and existing ones edited. Currently, surveys can have titles, and comments type questions. The app is deployed on Azure, and that are run on deploy via GitHub actions.
+The project now includes a survey management system with user authentication. Users can create accounts using unique usernames and securely log in to their accounts using their corresponding passwords. Once logged in, users are directed to a homepage displaying their surveys, with the option to create new surveys or edit existing ones. Surveys include titles, comments, multiple-choice questions, and scale questions. Each survey has a defined state (Draft, Open, or Closed), and when opened, a unique, shareable link is generated for collecting responses. The system supports storing comment responses in a database and provides a summary page for opened surveys, displaying questions and basic analytics for comments responses. This functionality ensures a seamless workflow for survey creation, sharing, and analysis. The application is deployed on Azure with GitHub Actions handling deployment processes.
 
-In Milestone 2, more question types, the ability to share and respond to surveys, and user authentication for the surveyor will all be added.
+In Milestone 3, the project will fully support collecting and storing responses for scale questions and multiple-choice questions in the database. The analytics page will be completed to include detailed insights for all question types, displaying results and visualizations for scale and multiple-choice questions.
 
 ## Scope
 *As stated in the project description.*
