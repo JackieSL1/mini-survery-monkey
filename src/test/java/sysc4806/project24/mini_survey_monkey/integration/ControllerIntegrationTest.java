@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.models.State;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -248,7 +251,14 @@ public class ControllerIntegrationTest {
                             .andExpect(status().is3xxRedirection());
 
                     // Delete the question
-                    mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
+                    String responseHTML =
+                            mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
+                    Pattern pattern = Pattern.compile("/create/" + surveyId + "/question/(\\d)/update");
+                    Matcher matcher = pattern.matcher(responseHTML);
+                    assert matcher.find();
+                    String questionID = matcher.group(1);
+
+                    mockMvc.perform(post("/create/" + surveyId + "/question/" + questionID + "/delete"))
                             .andExpect(status().is3xxRedirection())
                             .andExpect(header().string("Location", "/create/" + surveyId));
 

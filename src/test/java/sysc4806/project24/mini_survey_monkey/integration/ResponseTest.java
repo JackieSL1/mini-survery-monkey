@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +42,15 @@ public class ResponseTest {
             mockMvc.perform(get("/r/" + surveyId)).andExpect(status().is4xxClientError());
 
             mockMvc.perform(post("/create/" + surveyId + "/question"));
-            mockMvc.perform(post("/create/" + surveyId + "/question/1/update").param("newQuestionText",
+
+            String responseHTML =
+                    mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
+            Pattern pattern = Pattern.compile("/create/" + surveyId + "/question/(\\d)/update");
+            Matcher matcher = pattern.matcher(responseHTML);
+            assert matcher.find();
+            String questionID = matcher.group(1);
+
+            mockMvc.perform(post("/create/" + surveyId + "/question/" + questionID + "/update").param("newQuestionText",
                     "This is question 1"));
             mockMvc.perform(post("/create/" + surveyId + "/open"));
 

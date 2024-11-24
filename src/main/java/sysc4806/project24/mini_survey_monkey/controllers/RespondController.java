@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import sysc4806.project24.mini_survey_monkey.ResponseFormData;
 import sysc4806.project24.mini_survey_monkey.models.CommentResponse;
 import sysc4806.project24.mini_survey_monkey.models.Question;
-import sysc4806.project24.mini_survey_monkey.models.Response;
 import sysc4806.project24.mini_survey_monkey.models.Survey;
-import sysc4806.project24.mini_survey_monkey.repositories.CommentResponseRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 @Controller
@@ -44,7 +42,6 @@ public class RespondController {
         question.getResponses().add(response);
         response.setQuestion(question);
 
-        System.out.println("Submitted response: " + response);
         surveyRepository.save(survey);
 
         return "redirect:/r/" + surveyID;
