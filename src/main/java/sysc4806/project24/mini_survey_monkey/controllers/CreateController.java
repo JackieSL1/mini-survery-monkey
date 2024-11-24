@@ -7,6 +7,9 @@ import sysc4806.project24.mini_survey_monkey.models.*;
 import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Controller
 public class CreateController {
 
@@ -90,28 +93,95 @@ public class CreateController {
         return "redirect:/create/" + surveyID;
     }
 
-    @PostMapping("/create/{surveyID}/scale-question")
-    public String addScaleQuestion(@PathVariable("surveyID") int surveyID) {
-        // Retrieve the survey by ID
+    @PostMapping("/create/{surveyID}/question/add")
+    public String addQuestion(
+            @PathVariable("surveyID") int surveyID,
+            @RequestParam("type") String type,
+            @RequestParam(value = "questionText", required = false) String questionText,
+            @RequestParam(value = "options", required = false) List<String> options,
+            @RequestParam(value = "minValue", required = false) Integer minValue,
+            @RequestParam(value = "maxValue", required = false) Integer maxValue) {
+
         Survey survey = surveyRepository.findById(surveyID);
 
         if (survey == null) {
             throw new IllegalArgumentException("Survey not found");
         }
 
-        // Create a new ScaleQuestion with default values
-        ScaleQuestion newScaleQuestion = new ScaleQuestion();
-        newScaleQuestion.setQuestion("New Scale Question"); // Default question text
-        newScaleQuestion.setMinValue(1); // Default minimum scale value
-        newScaleQuestion.setMaxValue(10); // Default maximum scale value
+        // Add question based on type
+        if ("multiple-choice".equals(type)) {
+            MultipleChoiceQuestion mcQuestion = new MultipleChoiceQuestion();
+            mcQuestion.setQuestion(questionText != null ? questionText : "New Multiple Choice Question");
+            mcQuestion.setOptions(options != null ? options : Arrays.asList("Option 1", "Option 2"));
+            survey.addQuestion(mcQuestion);
+        } else if ("scale".equals(type)) {
+            ScaleQuestion scaleQuestion = new ScaleQuestion();
+            scaleQuestion.setQuestion(questionText != null ? questionText : "New Scale Question");
+            scaleQuestion.setMinValue(minValue != null ? minValue : 1);
+            scaleQuestion.setMaxValue(maxValue != null ? maxValue : 10);
+            survey.addQuestion(scaleQuestion);
+        }
 
-        // Associate the question with the survey
-        survey.addQuestion(newScaleQuestion);
-
-        // Save the survey (cascade saves the new question)
         surveyRepository.save(survey);
 
         return "redirect:/create/" + surveyID;
+    }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/update")
+    public String updateOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("optionIndex") int optionIndex,
+            @RequestParam("updatedOption") String updatedOption) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Update the specific option
+        List<String> options = question.getOptions();
+        if (optionIndex >= 0 && optionIndex < options.size()) {
+            options.set(optionIndex, updatedOption);
+            question.setOptions(options); // Update the question's options
+            questionRepository.save(question); // Save changes to the database
+        }
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
+    }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/delete")
+    public String deleteOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("optionIndex") int optionIndex) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Remove the option at the specified index
+        List<String> options = question.getOptions();
+        if (optionIndex >= 0 && optionIndex < options.size()) {
+            options.remove(optionIndex); // Remove the option from the list
+            question.setOptions(options); // Update the question's options
+            questionRepository.save(question); // Save the changes to the database
+        }
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
+    }
+    @PostMapping("/create/{surveyID}/question/{questionID}/option/add")
+    public String addOption(
+            @PathVariable("surveyID") int surveyID,
+            @PathVariable("questionID") int questionID,
+            @RequestParam("newOption") String newOption) {
+
+        // Fetch the question by ID
+        MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionID);
+
+        // Add the new option to the list of options
+        List<String> options = question.getOptions();
+        options.add(newOption); // Add the new option to the list
+
+        question.setOptions(options); // Update the question's options list
+        questionRepository.save(question); // Save the changes to the database
+
+        return "redirect:/create/" + surveyID; // Redirect back to the survey edit page
     }
 
     @PostMapping("/create/{surveyID}/question/{questionID}/update-scale")

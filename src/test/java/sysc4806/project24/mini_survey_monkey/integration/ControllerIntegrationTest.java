@@ -14,6 +14,7 @@ import sysc4806.project24.mini_survey_monkey.models.State;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -28,7 +29,7 @@ public class ControllerIntegrationTest {
         // Perform GET request on /home
         mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Welcome home!")))
+                .andExpect(content().string(containsString("Welcome guest!")))
                 .andExpect(content().string(containsString("My Surveys")))
                 .andExpect(content().string(containsString("TITLE")))
                 .andExpect(content().string(containsString("STATUS")));
@@ -198,6 +199,103 @@ public class ControllerIntegrationTest {
                                 .andExpect(view().name("home"));
                     });
         });
+    }
+
+    @Test
+    public void testAddMultipleChoiceQuestion() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
+                .andDo(result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    // Add a multiple-choice question to the survey
+                    mockMvc.perform(post("/create/" + surveyId + "/question/add")
+                                    .param("questionText", "What is your favorite color?")
+                                    .param("options", "Red", "Blue", "Green")
+                                    .param("type", "multiple-choice"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/create/" + surveyId));
+
+                    // Verify the question is added with the correct options
+                    mockMvc.perform(get("/create/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("create"))
+                            .andExpect(model().attributeExists("survey"))
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasSize(1))))
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasItem(
+                                    allOf(
+                                            hasProperty("question", equalTo("What is your favorite color?")),
+                                            hasProperty("options", containsInAnyOrder("Red", "Blue", "Green"))
+                                    )
+                            ))));
+                });
+    }
+
+    @Test
+    public void testDeleteMultipleChoiceQuestion() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
+                .andDo(result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    // Add a multiple-choice question
+                    mockMvc.perform(post("/create/" + surveyId + "/question/add")
+                                    .param("questionText", "What is your favorite color?")
+                                    .param("options", "Red", "Blue", "Green")
+                                    .param("type", "multiple-choice"))
+                            .andExpect(status().is3xxRedirection());
+
+                    // Delete the question
+                    mockMvc.perform(post("/create/" + surveyId + "/question/1/delete"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/create/" + surveyId));
+
+                    // Verify the question is deleted
+                    mockMvc.perform(get("/create/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
+                });
+    }
+
+    public void testNavigatingToSharingLink() throws Exception {
+        mockMvc.perform(post("/create")).andDo(
+                result -> {
+                    String location = result.getResponse().getHeader("Location");
+                    int surveyId = Integer.parseInt(location.split("/")[2]);
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+
+                    mockMvc.perform(post("/create/" + surveyId + "/open"))
+                            .andExpect(status().is3xxRedirection())
+                            .andExpect(header().string("Location", "/collect/" + surveyId));
+
+                    mockMvc.perform(get("/collect/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("collect"))
+                            .andExpect(content().string(containsString("Copy this URL: ")));
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("respond"));
+
+                    mockMvc.perform(post("/summary/" + surveyId + "/close"))
+                            .andExpect(status().is3xxRedirection());
+
+                    mockMvc.perform(get("/summary/" + surveyId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("summary"));
+
+                    mockMvc.perform(get("/r/" + surveyId))
+                            .andExpect(status().is4xxClientError());
+                }
+                );
     }
 }
 

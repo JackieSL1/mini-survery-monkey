@@ -2,7 +2,9 @@ package sysc4806.project24.mini_survey_monkey.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 @Controller
@@ -20,7 +22,10 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(Model model) {
+    public String home(
+            Model model,
+            @CookieValue(value=Constant.CookieKey.USERNAME, defaultValue="guest") String username) {
+        model.addAttribute("welcome", "Welcome " + username + "!");
         model.addAttribute("surveys", surveyRepository.findAll());
         return "home";
     }
