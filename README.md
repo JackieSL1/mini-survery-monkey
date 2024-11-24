@@ -27,7 +27,6 @@ The world's second most popular survey platform.
 - [Use cases](#use-cases)
 - [DB schema](#db-schema)
 - [UML class Diagram](#uml-class-diagram-for-models)
-- [Page descriptions](#page-descriptions)
 
 </details>
 
@@ -120,11 +119,3 @@ The following diagram can be updated by editing the corresponding drawio file in
 to png.
 
 ![UML class Diagram for Models](diagrams/ModelUML.drawio.svg)
-
-## Page descriptions
-Short descriptions of what each page does.
-
-**Pages (in alphabetical order):**
-* `banana`: Health check endpoint.
-* `home`: Dashboard for surveyor to view all their surveys. Includes buttons to create new surveys and manage their surveys.
-* `create/{id}`: Where surveys can be created and modified.
