@@ -7,7 +7,7 @@
               th:href="@{/css/style.css}" type="text/css">
     </head>
     <body>
-        <p>Welcome home!</p>
+        <p th:text="${welcome}"></p>
 
         <!--Create new survey button-->
         <form action="#" method="post" th:action="@{/create}">

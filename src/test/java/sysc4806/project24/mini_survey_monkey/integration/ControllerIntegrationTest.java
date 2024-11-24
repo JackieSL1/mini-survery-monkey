@@ -29,7 +29,7 @@ public class ControllerIntegrationTest {
         // Perform GET request on /home
         mockMvc.perform(get("/home"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Welcome home!")))
+                .andExpect(content().string(containsString("Welcome guest!")))
                 .andExpect(content().string(containsString("My Surveys")))
                 .andExpect(content().string(containsString("TITLE")))
                 .andExpect(content().string(containsString("STATUS")));
