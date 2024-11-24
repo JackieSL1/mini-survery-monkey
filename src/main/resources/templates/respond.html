@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-  <h2 th:text="${survey.getTitle()}"></h2>
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${survey.getTitle()}"></title>
+    </head>
+    <body>
+        <h2 th:text="${survey.getTitle()}"></h2>
+        <!-- Survey questions -->
+        <form method="post" th:action="@{/r/{id}/submit(id=${survey.getId()})}" th:object="${formData}">
+            <ol>
+                <p th:text="*{question.getQuestion()}"></p>
+                <input th:field="*{responseText}" type="text">
+                <!--                <li th:each="question, itemStat: *{responses}">-->
+                <!--                    <p th:text="${question.getQuestion()}"></p>-->
+                <!--                    <th:block th:switch="${question.getClass.simpleName}">-->
+                <!--                        <div th:case="'CommentQuestion'">-->
+                <!--                            <input th:field="*{}" type="text">-->
+                <!--                        </div>-->
+                <!--                        <div th:case="*">-->
+                <!--                            <p th:text="|Unhandled question type: ${question.getClass.simpleName}|">-->
+                <!--                        </div>-->
+                <!--                    </th:block>-->
+                <!--                </li>-->
+            </ol>
 
-</body>
+            <input type="submit" value="Submit response"/>
+        </form>
+    </body>
 </html>
