@@ -1,4 +1,4 @@
-// JS functions for multiple choice questions.
+// JS functions for questions.
 
 // Shows the multiple-choice form.
 function showMultipleChoiceForm() {
@@ -19,4 +19,9 @@ function addChoice() {
 // Removes a specific answer choice input field.
 function removeChoice(button) {
     button.parentElement.remove();
+}
+
+function showScaleForm() {
+    document.getElementById("scaleForm").style.display = "block";
+    document.getElementById("multipleChoiceForm").style.display = "none";
 }
