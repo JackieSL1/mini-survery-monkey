@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.models.State;
+import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -267,6 +268,15 @@ public class ControllerIntegrationTest {
                             .andExpect(status().isOk())
                             .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
                 });
+    }
+
+    @Test
+    public void testGuestBindsToNewSurvey() throws Exception {
+        // Stubbed
+
+        // Create new survey as guest
+
+        // Assert that new survey is bound to guest user
     }
 }
 
