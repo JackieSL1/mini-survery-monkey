@@ -32,7 +32,6 @@ public class SummaryController {
                 .toList();
 
         model.addAttribute("survey", survey);
-        model.addAttribute("commentQuestions", commentQuestions);
 
         return "summary";
     }
