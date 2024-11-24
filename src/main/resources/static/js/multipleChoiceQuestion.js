@@ -20,3 +20,7 @@ function addChoice() {
 function removeChoice(button) {
     button.parentElement.remove();
 }
+function showScaleForm() {
+    document.getElementById("scaleForm").style.display = "block";
+    document.getElementById("multipleChoiceForm").style.display = "none";
+}

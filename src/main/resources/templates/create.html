@@ -125,13 +125,44 @@
     </ul>
 
     <!-- Add new question to survey -->
-    <form method="post"
-          th:action="@{/create/{id}/question(id=${survey.getId()})}">
+    <form method="post" th:action="@{/create/{id}/question(id=${survey.getId()})}">
         <p>
             <button type="submit">Add Question</button>
             <button type="button" onclick="showMultipleChoiceForm()">Add Multiple Choice Question</button>
+            <button type="button" onclick="showScaleForm()">Add Scale Question</button>
         </p>
     </form>
+
+    <!-- Add new scale question form -->
+    <div id="scaleForm" style="display: none;">
+        <h3>Add Scale Question</h3>
+        <form method="post"
+              th:action="@{/create/{id}/question/add(id=${survey.getId()})}">
+            <p>
+                Question Text:<br>
+                <label>
+                    <input type="text" name="questionText" placeholder="Enter question text" required/>
+                </label>
+            </p>
+            <p>
+                Minimum Value:<br>
+                <label>
+                    <input type="number" name="minValue" placeholder="Minimum value" value="1" required/>
+                </label>
+            </p>
+            <p>
+                Maximum Value:<br>
+                <label>
+                    <input type="number" name="maxValue" placeholder="Maximum value" value="10" required/>
+                </label>
+            </p>
+            <input type="hidden" name="type" value="scale"/>
+            <p>
+                <button type="submit">Save Scale Question</button>
+            </p>
+        </form>
+    </div>
+
 
     <!-- Add new multiple-choice question form -->
     <div id="multipleChoiceForm" style="display: none;">
@@ -163,24 +194,6 @@
     </form>
 
     </div>
-    <form method="post" th:action="@{/create/{surveyID}/question/add(surveyID=${survey.getId()})}">
-        <p>
-            <label>Question Text:</label>
-            <input type="text" name="questionText" placeholder="Enter question text" required />
-        </p>
-        <p>
-            <label>Minimum Value:</label>
-            <input type="number" name="minValue" placeholder="Minimum value" value="1" required />
-        </p>
-        <p>
-            <label>Maximum Value:</label>
-            <input type="number" name="maxValue" placeholder="Maximum value" value="10" required />
-        </p>
-        <input type="hidden" name="type" value="scale" />
-        <p>
-            <button type="submit">Add Scale Question</button>
-        </p>
-    </form>
 
     <!-- Open survey for responses -->
     <form method="post"
