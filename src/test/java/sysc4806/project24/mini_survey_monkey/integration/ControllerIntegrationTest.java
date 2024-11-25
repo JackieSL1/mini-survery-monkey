@@ -278,5 +278,16 @@ public class ControllerIntegrationTest {
 
         // Assert that new survey is bound to guest user
     }
+
+    @Test
+    public void testUserBindsToNewSurvey() throws Exception {
+        // Stubbed
+
+        // Create account and log in
+
+        // Create new survey as logged-in user
+
+        // Assert that new survey is bound to logged-in user
+    }
 }
 
