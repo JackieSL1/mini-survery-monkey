@@ -10,15 +10,14 @@
 <form method="post" th:action="@{/r/{id}/submit(id=${survey.id})}" th:object="${formData}">
     <ol>
         <li th:each="input, inputStat: *{responseInputs}">
-            <p th:text="${input.question.question}"></p>
-            <input th:field="*{responseInputs[__${inputStat.index}__].questionType}" type="hidden">
-            <input th:field="*{responseInputs[__${inputStat.index}__].question}" type="hidden">
-            <th:block th:switch="*{responseInputs[__${inputStat.index}__].questionType}">
+            <div th:with="question=${survey.getQuestions().get(__${inputStat.index}__)}">
+            <p th:text="${question.getQuestion()}"></p>
+            <th:block th:switch="${question.class.simpleName}">
                 <div th:case="'CommentQuestion'">
                     <input th:field="*{responseInputs[__${inputStat.index}__].responseText}" type="text">
                 </div>
                 <div th:case="*">
-                    <p th:text="|Unhandled question type: ${input.questionType}|">
+                    <p th:text="|Unhandled question type: ${question.class.simpleName}|">
                 </div>
             </th:block>
         </li>
