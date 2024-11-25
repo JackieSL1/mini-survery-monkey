@@ -14,6 +14,7 @@ import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class RespondController {
@@ -32,10 +33,8 @@ public class RespondController {
         // TODO: Handle form having no questions
         ResponseForm formData = new ResponseForm();
         formData.setResponseInputs(new ArrayList<>());
-        for (Question question : survey.getQuestions()) {
+        for (Question _question: survey.getQuestions()) {
             ResponseFormInput input = new ResponseFormInput();
-            input.setQuestionType(question.getClass().getSimpleName());
-            input.setQuestion(question);
             input.setResponseText("");
             formData.getResponseInputs().add(input);
         }
@@ -46,11 +45,13 @@ public class RespondController {
 
     @PostMapping("/r/{surveyID}/submit")
     public String submit(@PathVariable("surveyID") int surveyID, @ModelAttribute ResponseForm formData) {
-        for (ResponseFormInput input : formData.getResponseInputs()) {
-            Question question = questionRepository.findById(input.getQuestion().getId());
+        List<ResponseFormInput> response = formData.getResponseInputs();
+        Survey survey = surveyRepository.findById(surveyID);
+        for (int i = 0; i < response.size(); i++) {
+            Question question = survey.getQuestions().get(i);
             if (question instanceof CommentQuestion) {
                 CommentResponse commentResponse = new CommentResponse();
-                commentResponse.setText(input.getResponseText());
+                commentResponse.setText(response.get(i).getResponseText());
                 question.getResponses().add(commentResponse);
             } else if (question instanceof MultipleChoiceQuestion) {
                // TODO: Implement

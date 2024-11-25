@@ -56,8 +56,6 @@ public class ResponseTest {
                     hasProperty("questions", hasSize(1))));
 
             mockMvc.perform(post("/r/" + surveyId + "/submit")
-                    .param("responseInputs[0].questionType", "CommentQuestion")
-                    .param("responseInputs[0].question", "1")
                     .param("responseInputs[0].responseText", "Hello world!")
             ).andExpect(status().is3xxRedirection());
 
@@ -103,11 +101,7 @@ public class ResponseTest {
                     hasProperty("questions", hasSize(2))));
 
             mockMvc.perform(post("/r/" + surveyId + "/submit")
-                    .param("responseInputs[0].questionType", "CommentQuestion")
-                    .param("responseInputs[0].question", "1")
                     .param("responseInputs[0].responseText", "Hello world!")
-                    .param("responseInputs[1].questionType", "CommentQuestion")
-                    .param("responseInputs[1].question", "2")
                     .param("responseInputs[1].responseText", "Hello world, 2!")
             ).andExpect(status().is3xxRedirection());
 
