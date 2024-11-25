@@ -6,18 +6,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import sysc4806.project24.mini_survey_monkey.ResponseFormData;
-import sysc4806.project24.mini_survey_monkey.models.CommentResponse;
-import sysc4806.project24.mini_survey_monkey.models.Question;
-import sysc4806.project24.mini_survey_monkey.models.Survey;
+import sysc4806.project24.mini_survey_monkey.ResponseForm;
+import sysc4806.project24.mini_survey_monkey.ResponseFormInput;
+import sysc4806.project24.mini_survey_monkey.models.*;
+import sysc4806.project24.mini_survey_monkey.repositories.CommentResponseRepository;
+import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
+
+import java.util.ArrayList;
 
 @Controller
 public class RespondController {
     private final SurveyRepository surveyRepository;
+    private final QuestionRepository questionRepository;
 
-    public RespondController(SurveyRepository surveyRepository) {
+    public RespondController(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
         this.surveyRepository = surveyRepository;
+        this.questionRepository = questionRepository;
     }
 
     @GetMapping("/r/{surveyID}")
@@ -25,24 +30,40 @@ public class RespondController {
         Survey survey = surveyRepository.findById(surveyID);
         model.addAttribute("survey", survey);
         // TODO: Handle form having no questions
-        ResponseFormData formData = new ResponseFormData();
-        formData.setQuestion(survey.getQuestions().get(0));
+        ResponseForm formData = new ResponseForm();
+        formData.setResponseInputs(new ArrayList<>());
+        for (Question question : survey.getQuestions()) {
+            ResponseFormInput input = new ResponseFormInput();
+            input.setQuestionType(question.getClass().getSimpleName());
+            input.setQuestion(question);
+            input.setResponseText("");
+            formData.getResponseInputs().add(input);
+        }
         model.addAttribute("formData", formData);
 
         return "respond";
     }
 
     @PostMapping("/r/{surveyID}/submit")
-    public String submit(@PathVariable("surveyID") int surveyID, @ModelAttribute ResponseFormData formData) {
-        Survey survey = surveyRepository.findById(surveyID);
-        CommentResponse response = new CommentResponse();
-        response.setText(formData.getResponseText());
+    public String submit(@PathVariable("surveyID") int surveyID, @ModelAttribute ResponseForm formData) {
+        for (ResponseFormInput input : formData.getResponseInputs()) {
+            Question question = questionRepository.findById(input.getQuestion().getId());
+            if (question instanceof CommentQuestion) {
+                CommentResponse commentResponse = new CommentResponse();
+                commentResponse.setText(input.getResponseText());
+                question.getResponses().add(commentResponse);
+            } else if (question instanceof MultipleChoiceQuestion) {
+               // TODO: Implement
+                continue;
+            } else if (question instanceof ScaleQuestion) {
+                // TODO: Implement
+                continue;
+            } else {
+                throw new RuntimeException("Unhandled question type: " + question.getClass());
+            }
 
-        Question question = survey.getQuestions().get(0);
-        question.getResponses().add(response);
-        response.setQuestion(question);
-
-        surveyRepository.save(survey);
+            questionRepository.save(question);
+        }
 
         return "redirect:/r/" + surveyID;
     }
