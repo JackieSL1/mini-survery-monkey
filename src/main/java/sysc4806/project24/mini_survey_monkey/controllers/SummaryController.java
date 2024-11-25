@@ -24,13 +24,6 @@ public class SummaryController {
     @GetMapping("/summary/{surveyID}")
     public String viewSurvey(@PathVariable("surveyID") int surveyID, Model model) {
         Survey survey = surveyRepository.findById(surveyID);
-
-        // Retrieve all CommentQuestions for this survey
-        List<CommentQuestion> commentQuestions = survey.getQuestions().stream()
-                .filter(question -> question instanceof CommentQuestion)
-                .map(question -> (CommentQuestion) question)
-                .toList();
-
         model.addAttribute("survey", survey);
 
         return "summary";
