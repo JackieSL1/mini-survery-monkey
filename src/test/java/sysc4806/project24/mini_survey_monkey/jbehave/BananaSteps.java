@@ -43,20 +43,15 @@ public class BananaSteps {
 
     @When("the user accesses the \"$endpoint\" endpoint")
     public void whenUserAccessesBananaEndpoint(String endpoint) throws Exception {
-        /*
-        System.out.println("When endpoint: " + endpoint);
         MvcResult result = mockMvc.perform(get(endpoint))
                 .andExpect(status().isOk()) // Check that the endpoint is reachable
                 .andReturn();
         response = mockMvc.perform(get(endpoint));
-
-         */
     }
 
     @Then("the response should be \"$expectedResponse\"")
     public void thenResponseShouldBe(String expectedResponse) throws Exception {
-        assertTrue(true);
-        //response.andExpect(content().string(containsString("Banana.")));
+        response.andExpect(content().string(containsString("Banana.")));
     }
 }
 

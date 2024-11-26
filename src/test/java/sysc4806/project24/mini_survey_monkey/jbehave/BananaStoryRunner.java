@@ -14,25 +14,9 @@ import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import sysc4806.project24.mini_survey_monkey.MiniSurveyMonkeyApplication;
-import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
-//import org.springframework.boot.test.SpringApplicationConfiguration;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
-import sysc4806.project24.mini_survey_monkey.interceptors.CollectInterceptor;
-import sysc4806.project24.mini_survey_monkey.interceptors.CreateInterceptor;
-import sysc4806.project24.mini_survey_monkey.interceptors.ResponseInterceptor;
-import sysc4806.project24.mini_survey_monkey.interceptors.SummaryInterceptor;
 
 import java.util.List;
 

@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>org.jbehave</groupId>
 			<artifactId>jbehave-core</artifactId>
-			<version>4.0.4</version>
+			<version>5.2.0</version>
 		</dependency>
 
 		<dependency>
@@ -76,7 +76,6 @@
 			<groupId>org.jbehave</groupId>
 			<artifactId>jbehave-gherkin</artifactId>
 			<version>4.0.4</version>
-
 		</dependency>
 	</dependencies>
 
