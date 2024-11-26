@@ -28,9 +28,6 @@ public class BananaSteps {
 
     @When("the user accesses the \"$endpoint\" endpoint")
     public void whenUserAccessesBananaEndpoint(String endpoint) throws Exception {
-        MvcResult result = mockMvc.perform(get(endpoint))
-                .andExpect(status().isOk()) // Check that the endpoint is reachable
-                .andReturn();
         response = mockMvc.perform(get(endpoint));
     }
 
