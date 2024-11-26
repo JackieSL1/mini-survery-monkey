@@ -1,24 +1,55 @@
 package sysc4806.project24.mini_survey_monkey.jbehave;
 
 import org.jbehave.core.configuration.Configuration;
+import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.io.LoadFromClasspath;
+import org.jbehave.core.junit.JUnitStory;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
+import org.jbehave.core.steps.CandidateSteps;
+import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.MiniSurveyMonkeyApplication;
+import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
+//import org.springframework.boot.test.SpringApplicationConfiguration;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.controllers.BananaController;
+import sysc4806.project24.mini_survey_monkey.interceptors.CollectInterceptor;
+import sysc4806.project24.mini_survey_monkey.interceptors.CreateInterceptor;
+import sysc4806.project24.mini_survey_monkey.interceptors.ResponseInterceptor;
+import sysc4806.project24.mini_survey_monkey.interceptors.SummaryInterceptor;
 
 import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-public class BananaStoryRunner extends JUnitStories {
+@AutoConfigureMockMvc
+//@SpringApplicationConfiguration(classes = { MiniSurveyMonkeyApplication.class})
+public class BananaStoryRunner extends JUnitStory {
+
+    @Autowired
+    public MockMvc mvc;
 
     @Override
     public Configuration configuration() {
-        return new org.jbehave.core.configuration.MostUsefulConfiguration()
+        return new MostUsefulConfiguration()
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
                 .useStoryReporterBuilder(
                         new StoryReporterBuilder()
@@ -26,7 +57,7 @@ public class BananaStoryRunner extends JUnitStories {
                                 .withFormats(Format.CONSOLE, Format.TXT, Format.HTML));
     }
 
-    @Override
+    //@Override
     public List<String> storyPaths() {
         return new StoryFinder().findPaths(
                 codeLocationFromClass(this.getClass()),
@@ -35,8 +66,8 @@ public class BananaStoryRunner extends JUnitStories {
     }
 
     @Override
-    public InstanceStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new BananaSteps());
+    public InjectableStepsFactory stepsFactory() {
+        return new InstanceStepsFactory(configuration(), new BananaSteps(mvc));
     }
 }
 
