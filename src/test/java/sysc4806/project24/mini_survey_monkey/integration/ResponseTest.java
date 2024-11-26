@@ -6,14 +6,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static sysc4806.project24.mini_survey_monkey.integration.TestHelpers.getQuestionID;
 
 @SpringBootTest
@@ -59,9 +55,11 @@ public class ResponseTest {
                     .param("responseInputs[0].responseText", "Hello world!")
             ).andExpect(status().is3xxRedirection());
 
-            // /r/1 should throw a 404 when the survey is Closed
+            // /r/1 should result in a closed survey page
             mockMvc.perform(post("/summary/" + surveyId + "/close"));
-            mockMvc.perform(get("/r/" + surveyId)).andExpect(status().is4xxClientError());
+            mockMvc.perform(get("/r/" + surveyId))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("closed"));
         });
     }
 
@@ -105,9 +103,17 @@ public class ResponseTest {
                     .param("responseInputs[1].responseText", "Hello world, 2!")
             ).andExpect(status().is3xxRedirection());
 
-            // /r/1 should throw a 404 when the survey is Closed
+            // /r/1 should result in a closed survey page
             mockMvc.perform(post("/summary/" + surveyId + "/close"));
-            mockMvc.perform(get("/r/" + surveyId)).andExpect(status().is4xxClientError());
+            mockMvc.perform(get("/r/" + surveyId))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("closed"));
+
+            // /r/1 posting should be redirect to the closed screen
+            mockMvc.perform(post("/r/" + surveyId + "/submit")
+                    .param("responseInputs[0].responseText", "Hello world!")
+                    .param("responseInputs[1].responseText", "Hello world, 2!"))
+                    .andExpect(status().is3xxRedirection());
         });
     }
 }

@@ -19,6 +19,5 @@ public class ResponseInterceptor extends PageInterceptor{
         regex = "/r/([0-9]+)";
         surveyStatesToFilter = new HashSet<>();
         surveyStatesToFilter.add(State.DRAFT);
-        surveyStatesToFilter.add(State.CLOSED);
     }
 }

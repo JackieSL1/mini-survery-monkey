@@ -30,6 +30,10 @@ public class RespondController {
     public String respond(@PathVariable("surveyID") int surveyID, Model model) {
         Survey survey = surveyRepository.findById(surveyID);
         model.addAttribute("survey", survey);
+        if (survey.getState().equals(State.CLOSED)) {
+           return "closed";
+        }
+
         // TODO: Handle form having no questions
         ResponseForm formData = new ResponseForm();
         formData.setResponseInputs(new ArrayList<>());
@@ -47,6 +51,10 @@ public class RespondController {
     public String submit(@PathVariable("surveyID") int surveyID, @ModelAttribute ResponseForm formData) {
         List<ResponseFormInput> response = formData.getResponseInputs();
         Survey survey = surveyRepository.findById(surveyID);
+        if (survey.getState().equals(State.CLOSED)) {
+            return "redirect:/r/" + surveyID;
+        }
+
         for (int i = 0; i < response.size(); i++) {
             Question question = survey.getQuestions().get(i);
             if (question instanceof CommentQuestion) {
