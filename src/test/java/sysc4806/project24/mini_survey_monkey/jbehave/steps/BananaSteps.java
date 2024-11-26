@@ -23,7 +23,7 @@ public class BananaSteps {
 
     @Given("the server is running")
     public void givenTheServerIsRunning() {
-        //assertNotNull(applicationContext.getBean(MockMvc.class), "MockMvc bean is not loaded!");
+        //No set up required, mockMvc is already running!
     }
 
     @When("the user accesses the \"$endpoint\" endpoint")
