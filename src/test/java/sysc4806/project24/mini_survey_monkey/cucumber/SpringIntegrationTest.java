@@ -49,8 +49,8 @@ public class SpringIntegrationTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    protected void updateSurveyTitle(int id, String title) throws Exception {
-        mockMvc.perform(post("/create/" + id + "/update")
+    protected void updateSurveyTitle(int surveyID, String title) throws Exception {
+        mockMvc.perform(post("/create/" + surveyID + "/update")
                         .param("title", title));
     }
 
