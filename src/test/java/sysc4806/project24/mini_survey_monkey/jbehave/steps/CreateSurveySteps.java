@@ -27,11 +27,13 @@ public class CreateSurveySteps {
 
     @Given("the user is on the home page")
     public void givenUserOnPage() throws Exception {
+        // gets the user on the home page
         mockMvc.perform(get("/home"));
     }
 
     @When("the user clicks on the \"Create Survey\" button")
     public void whenUserClicksButton() throws Exception {
+        // simulates the user clicking a button
         response = mockMvc.perform(post("/create"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", matchesPattern("/create/\\d+")))
@@ -48,6 +50,7 @@ public class CreateSurveySteps {
 
     @Then("the system sends them to the \"/create\" page for a new survey")
     public void thenResponseShouldBe() throws Exception {
+        // checks to make sure that the user is on the create page
         response.andExpect(header().string("Location", startsWith("/create/")));
     }
 }

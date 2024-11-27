@@ -36,6 +36,7 @@ public abstract class StoryRunner extends JUnitStory {
 
     @Override
     public Configuration configuration() {
+        // generic configuration
         return new MostUsefulConfiguration()
                 .useStoryLoader(new LoadFromClasspath(this.getClass()))
                 .useStoryReporterBuilder(

@@ -16,11 +16,13 @@ public class CreateSurveyRunner extends StoryRunner{
 
     @Override
     public InjectableStepsFactory stepsFactory() {
+        // connects the runner to the steps
         return new InstanceStepsFactory(configuration(), new CreateSurveySteps(mvc));
     }
 
     @Override
     public List<String> storyPaths() {
+        // connects the runner to the story
         return Arrays.asList("stories/create-survey.story");
     }
 }
