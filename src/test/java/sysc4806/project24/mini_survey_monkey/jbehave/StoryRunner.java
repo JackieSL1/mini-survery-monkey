@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.jbehave.steps.BananaSteps;
+import sysc4806.project24.mini_survey_monkey.jbehave.steps.CreateSurveySteps;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class StoryRunner extends JUnitStories {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new BananaSteps(mvc));
+        return new InstanceStepsFactory(configuration(), new BananaSteps(mvc), new CreateSurveySteps(mvc));
     }
 }
 
