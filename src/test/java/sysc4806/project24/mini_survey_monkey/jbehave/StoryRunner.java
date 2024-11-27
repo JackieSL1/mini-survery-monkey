@@ -27,7 +27,9 @@ import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 @SpringBootTest
 @AutoConfigureMockMvc
 //@SpringApplicationConfiguration(classes = { MiniSurveyMonkeyApplication.class})
-public class StoryRunner extends JUnitStories {
+public abstract class StoryRunner extends JUnitStory {
+
+    protected String storyName;
 
     @Autowired
     public MockMvc mvc;
@@ -42,17 +44,8 @@ public class StoryRunner extends JUnitStories {
                                 .withFormats(Format.CONSOLE, Format.TXT, Format.HTML));
     }
 
-    //@Override
-    public List<String> storyPaths() {
-        return new StoryFinder().findPaths(
-                codeLocationFromClass(this.getClass()),
-                "stories/*.story",
-                "");
-    }
+    public abstract InjectableStepsFactory stepsFactory();
 
-    @Override
-    public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new BananaSteps(mvc), new CreateSurveySteps(mvc));
-    }
+    public abstract List<String> storyPaths();
 }
 
