@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static sysc4806.project24.mini_survey_monkey.integration.TestHelpers.getQuestionID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -254,10 +255,7 @@ public class ControllerIntegrationTest {
                     // Delete the question
                     String responseHTML =
                             mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
-                    Pattern pattern = Pattern.compile("/create/" + surveyId + "/question/(\\d)/update");
-                    Matcher matcher = pattern.matcher(responseHTML);
-                    assert matcher.find();
-                    String questionID = matcher.group(1);
+                    int questionID = getQuestionID(surveyId, responseHTML);
 
                     mockMvc.perform(post("/create/" + surveyId + "/question/" + questionID + "/delete"))
                             .andExpect(status().is3xxRedirection())
