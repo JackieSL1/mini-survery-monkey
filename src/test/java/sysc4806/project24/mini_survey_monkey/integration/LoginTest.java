@@ -28,13 +28,14 @@ public class LoginTest {
                 .param("password", password));
 
         // Should not log in user if password incorrect
-        mockMvc.perform(post("/login/authenticate")
+        mockMvc.perform(post("/login")
                 .param("username", username)
                 .param("password", "primatology3life"))
-                        .andExpect(content().string(containsString("ERROR: Invalid password.")));
+                        .andExpect(content().string(containsString("ERROR: Invalid password.")))
+                        .andExpect(status().isOk());
 
         // Should redirect to home page after successful log in
-        mockMvc.perform(post("/login/authenticate")
+        mockMvc.perform(post("/login")
                         .param("username", username)
                         .param("password", password))
                 .andExpect(status().is3xxRedirection())
@@ -46,9 +47,10 @@ public class LoginTest {
         String username = "sarvesh";
         String password = "bluelagoon";
 
-        mockMvc.perform(post("/login/authenticate")
+        mockMvc.perform(post("/login")
                         .param("username", username)
                         .param("password", password))
-                .andExpect(content().string(containsString("ERROR: Username not found.")));
+                .andExpect(content().string(containsString("ERROR: Username not found.")))
+                .andExpect(status().isOk());
     }
 }
