@@ -1,14 +1,14 @@
 package sysc4806.project24.mini_survey_monkey.integration;
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.State;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import sysc4806.project24.mini_survey_monkey.models.User;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,7 +18,7 @@ import static sysc4806.project24.mini_survey_monkey.integration.TestHelpers.getQ
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ControllerIntegrationTest {
+public class ControllerIntegrationTest extends IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -265,6 +265,36 @@ public class ControllerIntegrationTest {
                             .andExpect(status().isOk())
                             .andExpect(model().attribute("survey", hasProperty("questions", hasSize(0))));
                 });
+    }
+
+    @Test
+    public void testGuestBindsToNewSurvey() throws Exception {
+        // Create new survey as guest
+        int surveyId = createSurvey();
+        String title = updateSurveyTitle(surveyId, null);
+
+        // Check if new survey displays on guest homepage
+        htmlContains("/home", Constant.GUEST_USERNAME, null);
+        htmlContains("/home", title, null);
+    }
+
+    @Test
+    public void testUserBindsToNewSurvey() throws Exception {
+        // Setup
+        User user = new User();
+        user.setUsername("jackie");
+        user.setPassword("i<3braeden");
+        signUpNewUser(user);
+        loginExistingUser(user);
+        Cookie cookie = new Cookie(Constant.CookieKey.USERNAME, user.getUsername());
+
+        // Create new survey and update title as logged-in user
+        int surveyId = createSurvey();
+        String title = updateSurveyTitle(surveyId, null);
+
+        // Check if new survey displays on user homepage
+        htmlContains("/home", user.getUsername(), cookie);
+        htmlContains("/home", title, cookie);
     }
 }
 
