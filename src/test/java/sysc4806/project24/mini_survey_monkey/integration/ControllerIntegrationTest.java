@@ -94,7 +94,7 @@ public class ControllerIntegrationTest extends IntegrationTest {
     public void testValidRootRedirection() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", startsWith("/home")));
+                .andExpect(header().string("Location", startsWith("/login")));
     }
 
     /**
@@ -270,8 +270,8 @@ public class ControllerIntegrationTest extends IntegrationTest {
     @Test
     public void testGuestBindsToNewSurvey() throws Exception {
         // Create new survey as guest
-        int surveyId = createSurvey();
-        String title = updateSurveyTitle(surveyId, null);
+        int surveyId = createSurvey(null);
+        String title = updateSurveyTitle(surveyId, null, null);
 
         // Check if new survey displays on guest homepage
         htmlContains("/home", Constant.GUEST_USERNAME, null);
@@ -286,15 +286,48 @@ public class ControllerIntegrationTest extends IntegrationTest {
         user.setPassword("i<3braeden");
         signUpNewUser(user);
         loginExistingUser(user);
-        Cookie cookie = new Cookie(Constant.CookieKey.USERNAME, user.getUsername());
+        Cookie cookie = new Cookie(Constant.CookieKey.VALUE, user.getUsername());
 
         // Create new survey and update title as logged-in user
-        int surveyId = createSurvey();
-        String title = updateSurveyTitle(surveyId, null);
+        int surveyId = createSurvey(cookie);
+        String title = updateSurveyTitle(surveyId, null, cookie);
 
         // Check if new survey displays on user homepage
         htmlContains("/home", user.getUsername(), cookie);
         htmlContains("/home", title, cookie);
+    }
+
+    @Test
+    public void testUserSurveysAreFiltered() throws Exception {
+        // Setup
+        User user1 = new User();
+        user1.setUsername("user1");
+        user1.setPassword("i<3braeden");
+        signUpNewUser(user1);
+
+        User user2 = new User();
+        user2.setUsername("user2");
+        user2.setPassword("i</3braeden");
+        signUpNewUser(user2);
+
+        // Create new survey and update title as user1
+        loginExistingUser(user1);
+        Cookie cookie1 = new Cookie(Constant.CookieKey.VALUE, user1.getUsername());
+
+        int surveyId = createSurvey(cookie1);
+        String surveyTitle1 = "User1s survey";
+        String title = updateSurveyTitle(surveyId, surveyTitle1, cookie1);
+
+        htmlContains("/home", user1.getUsername(), cookie1);
+        htmlContains("/home", title, cookie1);
+
+        // Login as user2
+        loginExistingUser(user2);
+        Cookie cookie2 = new Cookie(Constant.CookieKey.VALUE, user2.getUsername());
+
+        // Verify that user2's home does NOT show user1's survey
+        htmlContains("/home", user2.getUsername(), cookie2);
+        htmlNotContains("/home", title, cookie2);
     }
 }
 

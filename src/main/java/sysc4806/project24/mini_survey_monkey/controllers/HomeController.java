@@ -5,28 +5,34 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import sysc4806.project24.mini_survey_monkey.Constant;
+import sysc4806.project24.mini_survey_monkey.models.User;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
+import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 @Controller
 public class HomeController {
 
-   private final SurveyRepository surveyRepository;
+    private final SurveyRepository surveyRepository;
+    private final UserRepository userRepository;
 
-    public HomeController(SurveyRepository surveyRepository) {
+    public HomeController(SurveyRepository surveyRepository, UserRepository userRepository) {
         this.surveyRepository = surveyRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
     public String root(Model model) {
-        return "redirect:/home"; // TODO: redirect to login page once implemented
+        return "redirect:/login";
     }
 
     @GetMapping("/home")
-    public String home(
-            Model model,
-            @CookieValue(value=Constant.CookieKey.USERNAME, defaultValue=Constant.GUEST_USERNAME) String username) {
+    public String home(Model model, @CookieValue(value = Constant.CookieKey.VALUE, defaultValue =
+            Constant.GUEST_USERNAME) String username) {
         model.addAttribute("welcome", "Welcome " + username + "!");
-        model.addAttribute("surveys", surveyRepository.findAll());
+
+        User user = userRepository.findByUsername(username);
+        model.addAttribute("surveys", surveyRepository.findAllByUser(user));
+
         return "home";
     }
 }
