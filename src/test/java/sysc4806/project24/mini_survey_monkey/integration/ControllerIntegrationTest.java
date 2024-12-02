@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.State;
-import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,7 +16,7 @@ import static sysc4806.project24.mini_survey_monkey.integration.TestHelpers.getQ
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ControllerIntegrationTest {
+public class ControllerIntegrationTest extends IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -270,11 +267,17 @@ public class ControllerIntegrationTest {
 
     @Test
     public void testGuestBindsToNewSurvey() throws Exception {
-        // Stubbed
+        System.out.println("INFO: Testing if guest binds to new survey ...");
 
         // Create new survey as guest
+        int surveyId = createSurvey();
+        System.out.println("INFO: Created survey with ID: " + surveyId);
 
-        // Assert that new survey is bound to guest user
+        String title = updateSurveyTitle(surveyId, null);
+
+        // Check if new survey displays on guest homepage
+        htmlContains("/home", Constant.GUEST_USERNAME);
+        htmlContains("/home", title);
     }
 
     @Test
