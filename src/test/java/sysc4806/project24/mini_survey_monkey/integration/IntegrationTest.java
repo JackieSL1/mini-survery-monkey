@@ -1,9 +1,11 @@
 package sysc4806.project24.mini_survey_monkey.integration;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.models.User;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,11 +78,32 @@ public abstract class IntegrationTest {
      *
      * @param urlTemplate URL to GET HTML from. (Eg. "/home", "/create/1")
      * @param text Text to search for.
+     * @param cookie Cookie to use in request. If null, generates a default cookie.
      * @throws Exception When html does not contain text.
      */
-    protected void htmlContains(String urlTemplate, String text) throws Exception {
-        mockMvc.perform(get("/home"))
+    protected void htmlContains(String urlTemplate, String text, Cookie cookie) throws Exception {
+        if (cookie == null) { cookie = createDefaultCookie();}
+
+        mockMvc.perform(get("/home")
+                        .cookie(cookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(text)));
+    }
+
+    protected void signUpNewUser(User user) throws Exception {
+        mockMvc.perform(post("/signup")
+                .param("username", user.getUsername())
+                .param("password", user.getPassword()));
+    }
+
+    protected void loginExistingUser(User user) throws Exception {
+        mockMvc.perform(post("/login/authenticate")
+                    .param("username", user.getUsername())
+                    .param("password", user.getPassword()))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(header().string("Location", "/home"));}
+
+    private Cookie createDefaultCookie() {
+        return new Cookie("JSESSIONID", "");
     }
 }

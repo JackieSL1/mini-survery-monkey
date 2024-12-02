@@ -1,5 +1,6 @@
 package sysc4806.project24.mini_survey_monkey.integration;
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.State;
+import sysc4806.project24.mini_survey_monkey.models.User;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -276,19 +278,27 @@ public class ControllerIntegrationTest extends IntegrationTest {
         String title = updateSurveyTitle(surveyId, null);
 
         // Check if new survey displays on guest homepage
-        htmlContains("/home", Constant.GUEST_USERNAME);
-        htmlContains("/home", title);
+        htmlContains("/home", Constant.GUEST_USERNAME, null);
+        htmlContains("/home", title, null);
     }
 
     @Test
     public void testUserBindsToNewSurvey() throws Exception {
-        // Stubbed
+        // Setup
+        User user = new User();
+        user.setUsername("jackie");
+        user.setPassword("i<3braeden");
+        signUpNewUser(user);
+        loginExistingUser(user);
+        Cookie cookie = new Cookie(Constant.CookieKey.USERNAME, user.getUsername());
 
-        // Create account and log in
+        // Create new survey and update title as logged-in user
+        int surveyId = createSurvey();
+        String title = updateSurveyTitle(surveyId, null);
 
-        // Create new survey as logged-in user
-
-        // Assert that new survey is bound to logged-in user
+        // Check if new survey displays on user homepage
+        htmlContains("/home", user.getUsername(), cookie);
+        htmlContains("/home", title, cookie);
     }
 }
 
