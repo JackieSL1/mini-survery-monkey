@@ -97,7 +97,7 @@ public abstract class IntegrationTest {
     }
 
     protected void loginExistingUser(User user) throws Exception {
-        mockMvc.perform(post("/login/authenticate")
+        mockMvc.perform(post("/login")
                     .param("username", user.getUsername())
                     .param("password", user.getPassword()))
             .andExpect(status().is3xxRedirection())
