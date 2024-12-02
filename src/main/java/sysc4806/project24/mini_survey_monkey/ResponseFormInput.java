@@ -1,11 +1,9 @@
 package sysc4806.project24.mini_survey_monkey;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
 public final class ResponseFormInput {
     private String responseText;
 
-    private Integer responseScaleSelection;
+    private int selectedValue;
 
     public String getResponseText() {
         return responseText;
@@ -15,12 +13,12 @@ public final class ResponseFormInput {
         this.responseText = responseText;
     }
 
-    public Integer getResponseScaleSelection() {
-        return responseScaleSelection;
+    public int getSelectedValue() {
+        return selectedValue;
     }
 
-    public void setResponseScaleSelection(Integer responseScaleSelection) {
-        this.responseScaleSelection = responseScaleSelection;
+    public void setSelectedValue(int responseScaleSelection) {
+        this.selectedValue = responseScaleSelection;
     }
 }
 

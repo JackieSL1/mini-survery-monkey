@@ -21,7 +21,7 @@
                         <span th:text="${question.minValue}">1</span>
                         <div style="flex-grow: 1; display: flex; justify-content: space-evenly;">
                             <input type="radio" th:id="'scale-' + ${question.id} + '-' + ${i}"
-                                   th:field="*{responseInputs[__${inputStat.index}__].responseScaleSelection}"
+                                   th:field="*{responseInputs[__${inputStat.index}__].selectedValue}"
                                    th:name="'scale-' + ${question.id}" th:value="${i}"
                                    th:each="i : ${#numbers.sequence(question.minValue, question.maxValue)}">
                         </div>

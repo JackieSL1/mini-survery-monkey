@@ -30,6 +30,14 @@
                         </li>
                     </ul>
                 </div>
+                <div th:if="${#strings.equals(question.class.simpleName, 'ScaleQuestion')}">
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.responses}" th:text="${response.selectedValue}">
+                            <!-- Display each response -->
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ol>
 
