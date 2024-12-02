@@ -64,7 +64,7 @@ public class ResponseTest {
     }
 
     /**
-     * Tests responding to a survey with multiple comment questions
+     * Tests responding to a survey with multiple comment questions and a scale question
      */
     @Test
     public void testMultipleResponseSubmissions() throws Exception {
@@ -81,6 +81,7 @@ public class ResponseTest {
             mockMvc.perform(get("/r/" + surveyId)).andExpect(status().is4xxClientError());
 
             mockMvc.perform(post("/create/" + surveyId + "/question"));
+            mockMvc.perform(post("/create/" + surveyId + "/question"));
             String responseHTML =
                     mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
             int questionId = getQuestionID(surveyId, responseHTML);
@@ -91,16 +92,26 @@ public class ResponseTest {
             mockMvc.perform(post("/create/" + surveyId + "/question/" + (questionId + 1) + "/update").param(
                     "newQuestionText", "This is question 2"));
 
+            mockMvc.perform(post("/create/" + surveyId + "/question/" + questionId + "/update-scale")
+                            .param("newQuestionText", "This is question 3") // Update the question text
+                            .param("minValue", "0") // Update the minimum scale value
+                            .param("maxValue", "10") // Update the maximum scale value
+                    )
+                    .andExpect(status().is3xxRedirection()) // Check for redirection status
+                    .andExpect(redirectedUrl("/create/" + surveyId)); // Verify redirection URL
+
+
             mockMvc.perform(post("/create/" + surveyId + "/open"));
 
             // /r/1 should return 200 now that the survey is Open
             mockMvc.perform(get("/r/" + surveyId)).andExpect(status().isOk()).andExpect(model().attribute("survey",
                     hasProperty("title", equalTo("New Survey Title")))).andExpect(model().attribute("survey",
-                    hasProperty("questions", hasSize(2))));
+                    hasProperty("questions", hasSize(3))));
 
             mockMvc.perform(post("/r/" + surveyId + "/submit")
                     .param("responseInputs[0].responseText", "Hello world!")
                     .param("responseInputs[1].responseText", "Hello world, 2!")
+                    .param("responseInputs[2].selectedValue", "5")
             ).andExpect(status().is3xxRedirection());
 
             // /r/1 should result in a closed survey page
@@ -112,7 +123,8 @@ public class ResponseTest {
             // /r/1 posting should be redirect to the closed screen
             mockMvc.perform(post("/r/" + surveyId + "/submit")
                     .param("responseInputs[0].responseText", "Hello world!")
-                    .param("responseInputs[1].responseText", "Hello world, 2!"))
+                    .param("responseInputs[1].responseText", "Hello world, 2!")
+                    .param("responseInputs[2].selectedValue", "5"))
                     .andExpect(status().is3xxRedirection());
         });
     }
