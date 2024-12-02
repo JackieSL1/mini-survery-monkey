@@ -62,10 +62,12 @@ public class RespondController {
                 commentResponse.setText(response.get(i).getResponseText());
                 question.getResponses().add(commentResponse);
             } else if (question instanceof MultipleChoiceQuestion) {
-               // TODO: Implement
+                // TODO: Implement
                 continue;
             } else if (question instanceof ScaleQuestion) {
-                // TODO: Implement
+                ScaleResponse scaleResponse = new ScaleResponse();
+                scaleResponse.setSelectedValue(response.get(i).getResponseScaleSelection());
+                question.getResponses().add(scaleResponse);
                 continue;
             } else {
                 throw new RuntimeException("Unhandled question type: " + question.getClass());
