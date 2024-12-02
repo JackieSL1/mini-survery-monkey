@@ -269,12 +269,8 @@ public class ControllerIntegrationTest extends IntegrationTest {
 
     @Test
     public void testGuestBindsToNewSurvey() throws Exception {
-        System.out.println("INFO: Testing if guest binds to new survey ...");
-
         // Create new survey as guest
         int surveyId = createSurvey();
-        System.out.println("INFO: Created survey with ID: " + surveyId);
-
         String title = updateSurveyTitle(surveyId, null);
 
         // Check if new survey displays on guest homepage
