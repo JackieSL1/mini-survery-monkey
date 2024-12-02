@@ -24,7 +24,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login/authenticate")
+    @PostMapping("/login")
     public String authenticate(
             Model model,
             HttpServletResponse response,
