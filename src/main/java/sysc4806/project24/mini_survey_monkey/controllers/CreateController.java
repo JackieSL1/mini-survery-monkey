@@ -3,9 +3,11 @@ package sysc4806.project24.mini_survey_monkey.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.*;
 import sysc4806.project24.mini_survey_monkey.repositories.QuestionRepository;
 import sysc4806.project24.mini_survey_monkey.repositories.SurveyRepository;
+import sysc4806.project24.mini_survey_monkey.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,15 +17,31 @@ public class CreateController {
 
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
 
-    public CreateController(SurveyRepository surveyRepository, QuestionRepository questionRepository) {
+    public CreateController(
+            SurveyRepository surveyRepository,
+            QuestionRepository questionRepository,
+            UserRepository userRepository) {
         this.surveyRepository = surveyRepository;
         this.questionRepository = questionRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/create")
-    public String create() {
+    public String create(@CookieValue(value= Constant.CookieValue.USERNAME, defaultValue=Constant.GUEST_USERNAME) String username) {
+        // If cookie is missing, assume that a guest is logged in.
+        //
+        // Check if guest is creating survey.
+        if (username.equals(Constant.GUEST_USERNAME)) {
+            // Create guest account if it doesn't exist.
+            if (userRepository.findByUsername(username) == null) {
+                userRepository.save(new User(Constant.GUEST_USERNAME, Constant.GUEST_USERNAME));
+            }
+        }
+
         Survey newSurvey = new Survey();
+        newSurvey.setUser(userRepository.findByUsername(username));
         newSurvey.setTitle(Survey.DEFAULT_TITLE);
         newSurvey.setState(State.DRAFT);
 

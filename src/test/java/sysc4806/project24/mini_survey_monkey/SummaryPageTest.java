@@ -51,7 +51,7 @@ public class SummaryPageTest {
         response2.setText("Green");
         response2.setQuestion(question);
 
-        question.setCommentResponses(Arrays.asList(response1, response2));
+        question.setResponses(Arrays.asList(response1, response2));
         survey.setQuestions(List.of(question));
 
         // Mock repository behavior

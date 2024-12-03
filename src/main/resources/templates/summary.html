@@ -25,7 +25,7 @@
                 <div th:if="${#strings.equals(question.class.simpleName, 'CommentQuestion')}">
                     <h4>Responses:</h4>
                     <ul>
-                        <li th:each="response : ${question.commentResponses}" th:text="${response.text}">
+                        <li th:each="response : ${question.responses}" th:text="${response.text}">
                             <!-- Display each response -->
                         </li>
                     </ul>

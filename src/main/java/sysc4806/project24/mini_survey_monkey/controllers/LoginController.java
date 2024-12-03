@@ -24,7 +24,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login/authenticate")
+    @PostMapping("/login")
     public String authenticate(
             Model model,
             HttpServletResponse response,
@@ -41,7 +41,7 @@ public class LoginController {
         }
 
         if (authenticated) {
-            Cookie cookie = new Cookie(Constant.CookieKey.USERNAME, username);
+            Cookie cookie = new Cookie(Constant.CookieValue.USERNAME, username);
             cookie.setPath("/"); // sends cookie to specified URL and all its subdirectories
             response.addCookie(cookie);
             return "redirect:/home";
