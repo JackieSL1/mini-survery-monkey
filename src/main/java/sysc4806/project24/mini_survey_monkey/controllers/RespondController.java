@@ -55,23 +55,27 @@ public class RespondController {
             return "redirect:/r/" + surveyID;
         }
 
-        for (int i = 0; i < response.size(); i++) {
-            Question question = survey.getQuestions().get(i);
-            if (question instanceof CommentQuestion) {
-                CommentResponse commentResponse = new CommentResponse();
-                commentResponse.setText(response.get(i).getResponseText());
-                question.getResponses().add(commentResponse);
-            } else if (question instanceof MultipleChoiceQuestion) {
-               // TODO: Implement
-                continue;
-            } else if (question instanceof ScaleQuestion) {
-                // TODO: Implement
-                continue;
-            } else {
-                throw new RuntimeException("Unhandled question type: " + question.getClass());
-            }
+        if (response != null){
+            for (int i = 0; i < response.size(); i++) {
+                Question question = survey.getQuestions().get(i);
+                if (question instanceof CommentQuestion) {
+                    CommentResponse commentResponse = new CommentResponse();
+                    commentResponse.setText(response.get(i).getResponseText());
+                    question.getResponses().add(commentResponse);
+                } else if (question instanceof MultipleChoiceQuestion) {
+                    // TODO: Implement
+                    continue;
+                } else if (question instanceof ScaleQuestion) {
+                    ScaleResponse scaleResponse = new ScaleResponse();
+                    Integer responseValue = response.get(i).getSelectedValue();
+                    scaleResponse.setSelectedValue(responseValue);
+                    question.getResponses().add(scaleResponse);
+                } else {
+                    throw new RuntimeException("Unhandled question type: " + question.getClass());
+                }
 
-            questionRepository.save(question);
+                questionRepository.save(question);
+            }
         }
 
         return "redirect:/r/" + surveyID;

@@ -16,6 +16,18 @@
                 <div th:case="'CommentQuestion'">
                     <input th:field="*{responseInputs[__${inputStat.index}__].responseText}" type="text">
                 </div>
+                <div th:case="'ScaleQuestion'">
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span th:text="${question.minValue}">1</span>
+                        <div style="flex-grow: 1; display: flex; justify-content: space-evenly;">
+                            <input type="radio" th:id="'scale-' + ${question.id} + '-' + ${i}"
+                                   th:field="*{responseInputs[__${inputStat.index}__].selectedValue}"
+                                   th:name="'scale-' + ${question.id}" th:value="${i}"
+                                   th:each="i : ${#numbers.sequence(question.minValue, question.maxValue)}">
+                        </div>
+                        <span th:text="${question.maxValue}">10</span>
+                    </div>
+                </div>
                 <div th:case="*">
                     <p th:text="|Unhandled question type: ${question.class.simpleName}|">
                 </div>
