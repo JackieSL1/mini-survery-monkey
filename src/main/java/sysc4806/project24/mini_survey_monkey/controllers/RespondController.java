@@ -68,11 +68,8 @@ public class RespondController {
                 } else if (question instanceof ScaleQuestion) {
                     ScaleResponse scaleResponse = new ScaleResponse();
                     Integer responseValue = response.get(i).getSelectedValue();
-                    System.out.println(responseValue);
                     scaleResponse.setSelectedValue(responseValue);
                     question.getResponses().add(scaleResponse);
-                    System.out.println(question.getResponses());
-                    System.out.println(question.getResponses().size());
                 } else {
                     throw new RuntimeException("Unhandled question type: " + question.getClass());
                 }
