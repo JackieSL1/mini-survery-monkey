@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.User;
 
 import java.util.Random;
@@ -117,12 +118,24 @@ public abstract class IntegrationTest {
                 .param("password", user.getPassword()));
     }
 
-    protected void loginExistingUser(User user) throws Exception {
+    /**
+     * Logs existing user into system.
+     *
+     * @param user Existing user to log in.
+     * @return Cookie of user.
+     * @throws Exception
+     */
+    protected Cookie loginExistingUser(User user) throws Exception {
         mockMvc.perform(post("/login")
                     .param("username", user.getUsername())
                     .param("password", user.getPassword()))
             .andExpect(status().is3xxRedirection())
-            .andExpect(header().string("Location", "/home"));}
+            .andExpect(header().string("Location", "/home"));
+
+        // Successful login
+        return new Cookie(Constant.CookieValue.USERNAME, user.getUsername());
+    }
+
 
     private Cookie createDefaultCookie() {
         return new Cookie("JSESSIONID", "");
