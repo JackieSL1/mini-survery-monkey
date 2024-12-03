@@ -94,6 +94,14 @@ public abstract class IntegrationTest {
                 .andExpect(content().string(containsString(text)));
     }
 
+    /**
+     * Checks if the HTML does not contain a specified text.
+     *
+     * @param urlTemplate URL to GET HTML from. (Eg. "/home", "/create/1")
+     * @param text Text to search for.
+     * @param cookie Cookie to use in request. If null, generates a default cookie.
+     * @throws Exception When html does contain the text.
+     */
     protected void htmlNotContains(String urlTemplate, String text, Cookie cookie) throws Exception {
         if (cookie == null) { cookie = createDefaultCookie();}
 
