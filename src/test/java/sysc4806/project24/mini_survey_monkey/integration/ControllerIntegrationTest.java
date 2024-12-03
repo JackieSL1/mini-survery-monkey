@@ -314,8 +314,7 @@ public class ControllerIntegrationTest extends IntegrationTest {
         Cookie cookie1 = loginExistingUser(user1);
 
         int surveyId = createSurvey(cookie1);
-        String surveyTitle1 = "User1s survey";
-        String title = updateSurveyTitle(surveyId, surveyTitle1, cookie1);
+        String title = updateSurveyTitle(surveyId, null, cookie1);
 
         htmlContains("/home", user1.getUsername(), cookie1);
         htmlContains("/home", title, cookie1);
