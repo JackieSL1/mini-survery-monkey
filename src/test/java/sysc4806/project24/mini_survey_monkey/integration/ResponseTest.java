@@ -128,4 +128,54 @@ public class ResponseTest {
                     .andExpect(status().is3xxRedirection());
         });
     }
+    /**
+     * Tests responding to a survey with a multiple-choice question
+     */
+    @Test
+    public void testMultipleChoiceResponseSubmission() throws Exception {
+        // Create a survey
+        mockMvc.perform(post("/create")).andDo(result -> {
+            String location = result.getResponse().getHeader("Location");
+            int surveyId = Integer.parseInt(location.split("/")[2]);
+
+            mockMvc.perform(get("/r/" + surveyId)).andExpect(status().is4xxClientError());
+
+            mockMvc.perform(post("/create/" + surveyId + "/update").param("title", "MC Survey Test"));
+
+            mockMvc.perform(post("/create/" + surveyId + "/question"));
+            String responseHTML =
+                    mockMvc.perform(get("/create/" + surveyId)).andReturn().getResponse().getContentAsString();
+            int questionID = getQuestionID(surveyId, responseHTML);
+            mockMvc.perform(post("/create/" + surveyId + "/question/" + questionID + "/update")
+                    .param("newQuestionText", "Choose an option")
+                    .param("newQuestionType", "MultipleChoiceQuestion")
+                    .param("options[0]", "Option 1")
+                    .param("options[1]", "Option 2")
+                    .param("options[2]", "Option 3"));
+
+            mockMvc.perform(post("/create/" + surveyId + "/open"));
+
+            mockMvc.perform(get("/r/" + surveyId))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attribute("survey",
+                            hasProperty("title", equalTo("MC Survey Test"))))
+                    .andExpect(model().attribute("survey",
+                            hasProperty("questions", hasSize(1))))
+                    .andExpect(model().attribute("survey",
+                            hasProperty("questions", hasItem(
+                                    hasProperty("question", equalTo("Choose an option"))))));
+
+
+            mockMvc.perform(post("/r/" + surveyId + "/submit")
+                            .param("responseInputs[0].responseText", "Option 2"))
+                    .andExpect(status().is3xxRedirection());
+            mockMvc.perform(post("/summary/" + surveyId + "/close"));
+            mockMvc.perform(get("/r/" + surveyId))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("closed"));
+            mockMvc.perform(post("/r/" + surveyId + "/submit")
+                            .param("responseInputs[0].responseText", "Option 3"))
+                    .andExpect(status().is3xxRedirection());
+        });
+    }
 }
