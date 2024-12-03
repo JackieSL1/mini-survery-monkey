@@ -286,7 +286,7 @@ public class ControllerIntegrationTest extends IntegrationTest {
         user.setPassword("i<3braeden");
         signUpNewUser(user);
         loginExistingUser(user);
-        Cookie cookie = new Cookie(Constant.CookieKey.VALUE, user.getUsername());
+        Cookie cookie = new Cookie(Constant.CookieValue.USERNAME, user.getUsername());
 
         // Create new survey and update title as logged-in user
         int surveyId = createSurvey(cookie);
@@ -312,7 +312,7 @@ public class ControllerIntegrationTest extends IntegrationTest {
 
         // Create new survey and update title as user1
         loginExistingUser(user1);
-        Cookie cookie1 = new Cookie(Constant.CookieKey.VALUE, user1.getUsername());
+        Cookie cookie1 = new Cookie(Constant.CookieValue.USERNAME, user1.getUsername());
 
         int surveyId = createSurvey(cookie1);
         String surveyTitle1 = "User1s survey";
@@ -323,7 +323,7 @@ public class ControllerIntegrationTest extends IntegrationTest {
 
         // Login as user2
         loginExistingUser(user2);
-        Cookie cookie2 = new Cookie(Constant.CookieKey.VALUE, user2.getUsername());
+        Cookie cookie2 = new Cookie(Constant.CookieValue.USERNAME, user2.getUsername());
 
         // Verify that user2's home does NOT show user1's survey
         htmlContains("/home", user2.getUsername(), cookie2);

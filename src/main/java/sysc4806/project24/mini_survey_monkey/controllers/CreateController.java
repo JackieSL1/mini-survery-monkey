@@ -29,7 +29,7 @@ public class CreateController {
     }
 
     @PostMapping("/create")
-    public String create(@CookieValue(value=Constant.CookieKey.VALUE, defaultValue=Constant.GUEST_USERNAME) String username) {
+    public String create(@CookieValue(value= Constant.CookieValue.USERNAME, defaultValue=Constant.GUEST_USERNAME) String username) {
         // If cookie is missing, assume that a guest is logged in.
         //
         // Check if guest is creating survey.

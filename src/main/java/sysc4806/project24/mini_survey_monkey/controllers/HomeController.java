@@ -26,7 +26,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(Model model, @CookieValue(value = Constant.CookieKey.VALUE, defaultValue =
+    public String home(Model model, @CookieValue(value = Constant.CookieValue.USERNAME, defaultValue =
             Constant.GUEST_USERNAME) String username) {
         model.addAttribute("welcome", "Welcome " + username + "!");
 

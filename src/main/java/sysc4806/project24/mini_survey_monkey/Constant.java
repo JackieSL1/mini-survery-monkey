@@ -4,7 +4,10 @@ public final class Constant {
 
     public static final String GUEST_USERNAME = "guest";
 
-    public final class CookieKey {
-        public static final String VALUE = "username";
+    /**
+     * Cookie values act as 'keys' in a map.
+     */
+    public final class CookieValue {
+        public static final String USERNAME = "username";
     }
 }
