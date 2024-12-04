@@ -13,7 +13,7 @@
         <h2 th:text="${survey.getTitle()}"></h2>
         <!-- Survey questions -->
         <ol>
-            <li th:each="question : ${survey.questions}">
+            <li th:each="question, inputStat : ${survey.questions}">
                 <p th:text="${question.getQuestion()}"></p>
 
                 <!-- Display options if the question is multiple-choice -->
@@ -41,11 +41,12 @@
                                 /*[# th:each="response : ${question.responses}"]*/
                                     values.push(/*[[${response.selectedValue}]]*/);
                                 /*[/]*/
-
+                            generateHistogram(values, "histogram-[[__${inputStat.index}__]]");
                             /*]]>*/
-                            generateHistogram(values, "histogram");
+
                         </script>
-                    <canvas id="histogram" width="400" height="200"></canvas>
+
+                    <canvas th:id="|histogram-${__${inputStat.index}__}|" width="400" height="200"></canvas>
 
 
                     <!-- This is old code showing that responses can in fact we displayed-->
