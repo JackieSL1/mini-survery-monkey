@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import sysc4806.project24.mini_survey_monkey.Constant;
 import sysc4806.project24.mini_survey_monkey.models.User;
+import sysc4806.project24.mini_survey_monkey.models.State;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +31,7 @@ public abstract class IntegrationTest {
      * @return ID of created survey.
      * @throws Exception
      */
-    protected int createSurvey(Cookie cookie) throws Exception {
+    protected int createSurvey(Cookie cookie, String title, State state) throws Exception {
         if (cookie == null) { cookie = createDefaultCookie();}
 
         // AtomicInteger allows a variable to be set and returned from a lambda expression.
@@ -48,6 +49,25 @@ public abstract class IntegrationTest {
                     surveyId.set(Integer.parseInt(location.split("/")[2]));
                 }
         );
+
+        // Set the title if provided
+        if (title != null) {
+            mockMvc.perform(post("/create/" + surveyId.get() + "/update")
+                            .param("title", title)
+                            .cookie(cookie))
+                    .andExpect(status().is3xxRedirection());
+        }
+
+        // Set the state if provided
+        if (state == State.OPEN) {
+            mockMvc.perform(post("/create/" + surveyId.get() + "/open").cookie(cookie))
+                    .andExpect(status().is3xxRedirection());
+        } else if (state == State.CLOSED) {
+            mockMvc.perform(post("/create/" + surveyId.get() + "/open").cookie(cookie));
+            mockMvc.perform(post("/summary/" + surveyId.get() + "/close").cookie(cookie))
+                    .andExpect(status().is3xxRedirection());
+        }
+
         return surveyId.get();
     }
 
@@ -135,6 +155,34 @@ public abstract class IntegrationTest {
         // Successful login
         return new Cookie(Constant.CookieValue.USERNAME, user.getUsername());
     }
+
+    /**
+     * Opens a survey by transitioning its state from DRAFT to OPEN.
+     * Sends a POST request to the `/create/{surveyId}/open` endpoint.
+     *
+     * @param surveyId the ID of the survey to open.
+     * @param cookie   the authentication cookie to include in the request.
+     * @throws Exception if the request fails or the expected redirection does not occur.
+     */
+    protected void openSurvey(int surveyId, Cookie cookie) throws Exception {
+        mockMvc.perform(post("/create/" + surveyId + "/open").cookie(cookie))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/collect/" + surveyId));
+    }
+
+    /**
+     * Asserts that accessing the specified endpoint results in a client error (4xx status code).
+     * Sends a GET request to the provided endpoint and checks for an error response.
+     *
+     * @param endpoint the URL endpoint to test.
+     * @param cookie   the authentication cookie to include in the request.
+     * @throws Exception if the request does not result in a 4xx error or fails to execute.
+     */
+    protected void assertEndpointReturnsError(String endpoint, Cookie cookie) throws Exception {
+        mockMvc.perform(get(endpoint).cookie(cookie))
+                .andExpect(status().is4xxClientError());
+    }
+
 
 
     private Cookie createDefaultCookie() {
