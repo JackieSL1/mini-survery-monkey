@@ -2,9 +2,9 @@ export function generateHistogram(values, canvasId){
 
     const numbers = values;
 
-    const binSize = 2; // Define bin size
-    const min = Math.min(...numbers); // Find minimum value
-    const max = Math.max(...numbers); // Find maximum value
+    const binSize = 2;
+    const min = Math.min(...numbers);
+    const max = Math.max(...numbers);
     const bins = [];
 
     for (let i = min; i <= max; i += binSize) {
@@ -33,7 +33,7 @@ export function generateHistogram(values, canvasId){
         options: {
             scales: {
                 x: {
-                    title: { display: true, text: 'Bins' }
+                    title: { display: true, text: 'Responses' }
                 },
                 y: {
                     title: { display: true, text: 'Frequency' },
