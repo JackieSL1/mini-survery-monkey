@@ -24,7 +24,7 @@ The world's second most popular survey platform.
 
 - [Description](#description)
 - [Deployment](#deployment)
-- [UML class Diagram](#uml-class-diagram-for-models)
+- [Models class diagram](#uml-class-diagram-for-models)
 - [DB schema](#db-schema)
 
 </details>
@@ -44,14 +44,13 @@ Additionally, users can:
 ## Deployment
 The application is deployed on Azure with GitHub Actions handling deployment processes.
 
-## UML class Diagram for Models
-The following diagram can be updated by editing the corresponding drawio file in diagrams and then exporting the drawing
-to png.
+## Models class diagram
+The following image a UML class diagram of the models implemented in the system.
 
-![UML class Diagram for Models](diagrams/models-class-diagrams-final.png)
+![Models class diagram](diagrams/models-class-diagrams-final.png)
 
 ## DB schema
-The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
+The following image is the DB schema of our system.
 
 ![DB schema](diagrams/db-schema-milestone-2.png)
 
