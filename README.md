@@ -59,4 +59,4 @@ The following diagram can be updated using the [Diagrams.net Integration Intelli
 The following diagram can be updated by editing the corresponding drawio file in diagrams and then exporting the drawing
 to png.
 
-![UML class Diagram for Models](diagrams/models-class-diagrams-milestone-2.png)
+![UML class Diagram for Models](diagrams/models-class-diagrams-final.png)
