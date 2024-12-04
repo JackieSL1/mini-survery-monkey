@@ -34,13 +34,17 @@
                 </div>
                 <div th:if="${#strings.equals(question.class.simpleName, 'ScaleQuestion')}">
                     <h4>Responses:</h4>
-                    <!-- This will be replaced with histogram-->
-                    <script type="module">
-                        import { generateHistogram } from '/js/analytics.js';
+                        <script type="module" th:inline="javascript">
+                            import { generateHistogram } from '/js/analytics.js';
+                            const values = [];
+                            /*<![CDATA[*/
+                                /*[# th:each="response : ${question.responses}"]*/
+                                    values.push(/*[[${response.selectedValue}]]*/);
+                                /*[/]*/
 
-                        const values = [1, 2, 3, 4, 5];
-                        generateHistogram(values, "histogram");
-                    </script>
+                            /*]]>*/
+                            generateHistogram(values, "histogram");
+                        </script>
                     <canvas id="histogram" width="400" height="200"></canvas>
 
 
