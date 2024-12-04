@@ -37,7 +37,12 @@ export function generateHistogram(values, canvasId){
                 },
                 y: {
                     title: { display: true, text: 'Frequency' },
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value){
+                            return value % 1 === 0 ? value : '';
+                        }
+                    }
                 }
             }
         }
