@@ -33,7 +33,6 @@
                     </ul>
                 </div>
                 <div th:if="${#strings.equals(question.class.simpleName, 'ScaleQuestion')}">
-                    <h4>Responses:</h4>
                         <script type="module" th:inline="javascript">
                             import { generateHistogram } from '/js/analytics.js';
                             const values = [];
@@ -47,14 +46,6 @@
                         </script>
 
                     <canvas th:id="|histogram-${__${inputStat.index}__}|" width="400" height="200"></canvas>
-
-
-                    <!-- This is old code showing that responses can in fact we displayed-->
-                    <ul>
-                        <li th:each="response : ${question.responses}" th:text="${response.selectedValue}">
-                            <!-- Display each response -->
-                        </li>
-                    </ul>
                 </div>
             </li>
         </ol>
