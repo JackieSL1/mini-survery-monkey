@@ -48,3 +48,45 @@ export function generateHistogram(values, canvasId){
         }
     });
 }
+export function generatePieChart(options, canvasId) {
+    const filteredOptions = options.filter(option => option && option.trim() !== ""); // This is to address Anand concern about null answers
+    const optionCounts = {};
+    filteredOptions.forEach(option => {
+        optionCounts[option] = (optionCounts[option] || 0) + 1;
+    });
+
+    if (Object.keys(optionCounts).length === 0) {
+        return;
+    }
+
+    const labels = Object.keys(optionCounts);
+    const data = Object.values(optionCounts);
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40'], // These are just Random colors
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' responses';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
