@@ -24,8 +24,8 @@ The world's second most popular survey platform.
 
 - [Current State](#current-state)
 - [Scope](#scope)
-- [DB schema](#db-schema)
 - [UML class Diagram](#uml-class-diagram-for-models)
+- [DB schema](#db-schema)
 
 </details>
 
@@ -50,13 +50,14 @@ The analytics page will be completed to include detailed insights for all questi
 * Users fill out a survey that is a form generated based on the type of questions in the survey.
 * Surveyor can close the survey whenever they want (thus not letting in new users to fill out the survey), and at that point a survey result is generated, compiling the answers: for open-ended questions, the answers are just listed as-is, for number questions a histogram of the answers is generated, for choice questions a pie chart is generated
 
-## DB schema
-The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
-
-![DB schema](diagrams/db-schema-milestone-2.png)
-
 ## UML class Diagram for Models
 The following diagram can be updated by editing the corresponding drawio file in diagrams and then exporting the drawing
 to png.
 
 ![UML class Diagram for Models](diagrams/models-class-diagrams-final.png)
+
+## DB schema
+The following diagram can be updated using the [Diagrams.net Integration IntelliJ Plugin](https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration).
+
+![DB schema](diagrams/db-schema-milestone-2.png)
+
