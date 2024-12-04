@@ -18,7 +18,7 @@
 
                 <!-- Display responses if the question is a MultipleChoiceQuestion -->
                 <div th:if="${#strings.equals(question.class.simpleName, 'MultipleChoiceQuestion')}">
-                    <h4>Responses:</h4>
+                    
                     <!-- Pie chart for MultipleChoiceQuestion -->
                     <canvas th:id="|pie-chart-${inputStat.index}|" width="200" height="200"></canvas>
                     <script type="module" th:inline="javascript">
