@@ -52,5 +52,5 @@ The following image a UML class diagram of the models implemented in the system.
 ## DB schema
 The following image is the DB schema of our system.
 
-![DB schema](diagrams/db-schema-milestone-2.png)
+![DB schema](diagrams/db-schema-final.png)
 
