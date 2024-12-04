@@ -19,9 +19,18 @@
                 <!-- Display responses if the question is a MultipleChoiceQuestion -->
                 <div th:if="${#strings.equals(question.class.simpleName, 'MultipleChoiceQuestion')}">
                     <h4>Responses:</h4>
-                    <ul>
-                        <li th:each="response : ${question.responses}" th:text="${response.selectedOption}">
-                    </ul>
+                    <!-- Pie chart for MultipleChoiceQuestion -->
+                    <canvas th:id="|pie-chart-${inputStat.index}|" width="200" height="200"></canvas>
+                    <script type="module" th:inline="javascript">
+                        import { generatePieChart } from '/js/analytics.js';
+                        const options = [];
+                        /*<![CDATA[*/
+                        /*[# th:each="response : ${question.responses}"]*/
+                        options.push(/*[[${response.selectedOption}]]*/);
+                        /*[/]*/
+                        generatePieChart(options, "pie-chart-[[__${inputStat.index}__]]");
+                        /*]]>*/
+                    </script>
                 </div>
 
                 <!-- Display responses if the question is a CommentQuestion -->
