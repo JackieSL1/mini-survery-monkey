@@ -5,13 +5,15 @@
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
         <link href="/css/style.css" media="all" rel="stylesheet"
               th:href="@{/css/style.css}" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script type="module" src="/js/analytics.js" defer></script>
     </head>
     <body>
         <p><a href="../home">Home</a> | <a href="../login">Logout</a></p>
         <h2 th:text="${survey.getTitle()}"></h2>
         <!-- Survey questions -->
         <ol>
-            <li th:each="question : ${survey.questions}">
+            <li th:each="question, inputStat : ${survey.questions}">
                 <p th:text="${question.getQuestion()}"></p>
 
                 <!-- Display responses if the question is a MultipleChoiceQuestion -->
@@ -32,12 +34,19 @@
                     </ul>
                 </div>
                 <div th:if="${#strings.equals(question.class.simpleName, 'ScaleQuestion')}">
-                    <h4>Responses:</h4>
-                    <ul>
-                        <li th:each="response : ${question.responses}" th:text="${response.selectedValue}">
-                            <!-- Display each response -->
-                        </li>
-                    </ul>
+                        <script type="module" th:inline="javascript">
+                            import { generateHistogram } from '/js/analytics.js';
+                            const values = [];
+                            /*<![CDATA[*/
+                                /*[# th:each="response : ${question.responses}"]*/
+                                    values.push(/*[[${response.selectedValue}]]*/);
+                                /*[/]*/
+                            generateHistogram(values, "histogram-[[__${inputStat.index}__]]");
+                            /*]]>*/
+
+                        </script>
+
+                    <canvas th:id="|histogram-${__${inputStat.index}__}|" width="400" height="200"></canvas>
                 </div>
             </li>
         </ol>
