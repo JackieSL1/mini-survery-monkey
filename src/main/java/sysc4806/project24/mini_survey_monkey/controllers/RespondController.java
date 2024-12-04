@@ -63,8 +63,9 @@ public class RespondController {
                     commentResponse.setText(response.get(i).getResponseText());
                     question.getResponses().add(commentResponse);
                 } else if (question instanceof MultipleChoiceQuestion) {
-                    // TODO: Implement
-                    continue;
+                    MultipleChoiceResponse multipleChoiceResponse = new MultipleChoiceResponse();
+                    multipleChoiceResponse.setSelectedOption(response.get(i).getResponseText());
+                    question.getResponses().add(multipleChoiceResponse);
                 } else if (question instanceof ScaleQuestion) {
                     ScaleResponse scaleResponse = new ScaleResponse();
                     Integer responseValue = response.get(i).getSelectedValue();

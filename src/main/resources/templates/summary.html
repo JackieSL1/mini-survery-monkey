@@ -14,10 +14,11 @@
             <li th:each="question : ${survey.questions}">
                 <p th:text="${question.getQuestion()}"></p>
 
-                <!-- Display options if the question is multiple-choice -->
+                <!-- Display responses if the question is a MultipleChoiceQuestion -->
                 <div th:if="${#strings.equals(question.class.simpleName, 'MultipleChoiceQuestion')}">
-                    <ul class="options-list">
-                        <li th:each="option : ${question.options}" th:text="${option}"></li>
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.responses}" th:text="${response.selectedOption}">
                     </ul>
                 </div>
 

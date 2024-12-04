@@ -16,6 +16,18 @@
                 <div th:case="'CommentQuestion'">
                     <input th:field="*{responseInputs[__${inputStat.index}__].responseText}" type="text">
                 </div>
+                <div th:case="'MultipleChoiceQuestion'">
+                    <ul>
+                        <li th:each="option, optStat: ${question.getOptions()}">
+                            <label>
+                                <input type="radio"
+                                       th:field="*{responseInputs[__${inputStat.index}__].responseText}"
+                                       th:value="${option}">
+                                <span th:text="${option}"></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
                 <div th:case="'ScaleQuestion'">
                     <div style="display: flex; justify-content: space-between; width: 100%;">
                         <span th:text="${question.minValue}">1</span>
@@ -32,6 +44,7 @@
                     <p th:text="|Unhandled question type: ${question.class.simpleName}|">
                 </div>
             </th:block>
+            </div>
         </li>
     </ol>
 
