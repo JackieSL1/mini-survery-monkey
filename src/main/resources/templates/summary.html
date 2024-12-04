@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title th:text="|${survey.getTitle()} Summary|">Survey</title>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+        <link href="/css/style.css" media="all" rel="stylesheet"
+              th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <p><a href="../home">Home</a> | <a href="../login">Logout</a></p>
+        <h2 th:text="${survey.getTitle()}"></h2>
+        <!-- Survey questions -->
+        <ol>
+            <li th:each="question : ${survey.questions}">
+                <p th:text="${question.getQuestion()}"></p>
+
+                <!-- Display responses if the question is a MultipleChoiceQuestion -->
+                <div th:if="${#strings.equals(question.class.simpleName, 'MultipleChoiceQuestion')}">
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.responses}" th:text="${response.selectedOption}">
+                    </ul>
+                </div>
+
+                <!-- Display responses if the question is a CommentQuestion -->
+                <div th:if="${#strings.equals(question.class.simpleName, 'CommentQuestion')}">
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.responses}" th:text="${response.text}">
+                            <!-- Display each response -->
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${#strings.equals(question.class.simpleName, 'ScaleQuestion')}">
+                    <h4>Responses:</h4>
+                    <ul>
+                        <li th:each="response : ${question.responses}" th:text="${response.selectedValue}">
+                            <!-- Display each response -->
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ol>
+
+        <!-- Close survey -->
+        <div th:if="${survey.getState().toString() == 'OPEN'}">
+            <form method="post"
+                  th:action="@{/summary/{id}/close(id=${survey.getId()})}"
+                  th:object="${survey}">
+                <p><input type="submit" value="Close Survey"/></p>
+            </form>
+        </div>
+    </body>
+</html>

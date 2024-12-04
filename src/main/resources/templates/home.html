@@ -3,11 +3,12 @@
     <head>
         <title>Home</title>
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-        <link rel="stylesheet" type="text/css" media="all"
-              href="/css/style.css" th:href="@{/css/style.css}">
+        <link href="/css/style.css" media="all" rel="stylesheet"
+              th:href="@{/css/style.css}" type="text/css">
     </head>
     <body>
-        <p>Welcome home!</p>
+        <p th:text="${welcome}"></p>
+        <p><a href="../login">Logout</a></p>
 
         <!--Create new survey button-->
         <form action="#" method="post" th:action="@{/create}">
@@ -22,10 +23,22 @@
                 <td>STATUS</td>
             </tr>
             <tr th:each="survey: ${surveys}">
-                <td><a
-                        th:href="@{/create/{id}(id=${survey.getId()})}"
-                        th:text="|${survey.getTitle()}|"
-                ></a></td>
+                <td>
+                    <div th:switch="${survey.getState().toString()}">
+                        <a th:case="'DRAFT'"
+                           th:href="@{/create/{id}(id=${survey.getId()})}"
+                           th:text="|${survey.getTitle()}|"
+                        ></a>
+                        <a th:case="'OPEN'"
+                           th:href="@{/collect/{id}(id=${survey.getId()})}"
+                           th:text="|${survey.getTitle()}|"
+                        ></a>
+                        <a th:case="'CLOSED'"
+                           th:href="@{summary/{id}(id=${survey.getId()})}"
+                           th:text="|${survey.getTitle()}|"
+                        ></a>
+                    </div>
+                </td>
                 <td>
                     <p th:text="${survey.getState()}"></p>
                 </td>

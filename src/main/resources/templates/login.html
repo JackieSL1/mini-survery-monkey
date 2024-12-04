@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Log in</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+  <link href="/css/style.css" media="all" rel="stylesheet"
+        th:href="@{/css/style.css}" type="text/css">
+</head>
+  <body>
+    <img alt="The Mini Survey Monkey" src="https://upload.wikimedia.org/wikipedia/commons/9/93/Typing_monkey_768px.png"
+         width="200">
+    <p>Don't have an account? <a href="./signup">Sign up</a></p>
+
+    <form method="post" action="/login">
+      <h1>Log in</h1>
+      <p th:text="${error}"></p>
+      <p>Enter username:</p>
+      <p><input type="text" name="username"/></p>
+      <p>Enter password:</p>
+      <p><input type="text" name="password"/></p>
+      <p><input type="submit" value="Log in"/></p>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${survey.title}"></title>
+</head>
+<body>
+<h2 th:text="${survey.title}"></h2>
+<!-- Survey questions -->
+<form method="post" th:action="@{/r/{id}/submit(id=${survey.id})}" th:object="${formData}">
+    <ol>
+        <li th:each="input, inputStat: *{responseInputs}">
+            <div th:with="question=${survey.getQuestions().get(__${inputStat.index}__)}">
+            <p th:text="${question.getQuestion()}"></p>
+            <th:block th:switch="${question.class.simpleName}">
+                <div th:case="'CommentQuestion'">
+                    <input th:field="*{responseInputs[__${inputStat.index}__].responseText}" type="text">
+                </div>
+                <div th:case="'MultipleChoiceQuestion'">
+                    <ul>
+                        <li th:each="option, optStat: ${question.getOptions()}">
+                            <label>
+                                <input type="radio"
+                                       th:field="*{responseInputs[__${inputStat.index}__].responseText}"
+                                       th:value="${option}">
+                                <span th:text="${option}"></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div th:case="'ScaleQuestion'">
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <span th:text="${question.minValue}">1</span>
+                        <div style="flex-grow: 1; display: flex; justify-content: space-evenly;">
+                            <input type="radio" th:id="'scale-' + ${question.id} + '-' + ${i}"
+                                   th:field="*{responseInputs[__${inputStat.index}__].selectedValue}"
+                                   th:name="'scale-' + ${question.id}" th:value="${i}"
+                                   th:each="i : ${#numbers.sequence(question.minValue, question.maxValue)}">
+                        </div>
+                        <span th:text="${question.maxValue}">10</span>
+                    </div>
+                </div>
+                <div th:case="*">
+                    <p th:text="|Unhandled question type: ${question.class.simpleName}|">
+                </div>
+            </th:block>
+            </div>
+        </li>
+    </ol>
+
+    <input type="submit" value="Submit response"/>
+</form>
+</body>
+</html>
